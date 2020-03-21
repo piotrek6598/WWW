@@ -8,16 +8,93 @@
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
     <script src='main.js'></script>
 </head>
-<header>
-    <img src="images/logo.jpg" class="" alt="logo firmy">
-</header>
+
 <body>
 
-<p id="pierwszy">Lista lotów z WAW</p>
-<p id="drugi">Lista zawiera tylko dzisiejsze loty</p>
-<div id="section">
+<div class="logo">
+    <header>
+        <img src="images/logo.jpg" class="logo" alt="logo firmy">
+    </header>
+</div>
+<div id="menu">
+    <header>Menu</header>
+    <ul>
+        <li><a href="index.html">Lista lotów</a></li>
+        <li><a href="#flightsList">Informacje o lotach</a>
+            <ul>
+                <li><a href="lot1.html">LO3839</a></li>
+                <li><a href="lot2.html">LH180</a></li>
+                <li><a href="todo.html">EK180</a></li>
+                <li><a href="todo.html">QR262</a></li>
+            </ul>
+        </li>
+        <li><a href="#bookingForm">Bilety</a>
+            <ul>
+                <li><a href="#bookingForm">Zakup biletów</a></li>
+                <li>Zmiana biletów</li>
+                <li>Zwrot biletów</li>
+            </ul>
+        </li>
+        <li><a href="#opoznienia">Opóźnienia</a></li>
+    </ul>
+</div>
+<div id="flightsList">
+    <header>Lista lotów</header>
+    <p id="drugi">Lista zawiera tylko dzisiejsze loty</p>
+    <div id="fligtsTable">
+        <p id="trzeci">Ale super lot</p>
+        <table class="table-standard">
+            <tbody>
+            <tr>
+                <th class="table-header-standard">Nr lotu</th>
+                <th class="table-header-standard">Skąd</th>
+                <th class="table-header-standard">Dokąd</th>
+                <th class="table-header-standard">Data</th>
+                <th class="table-header-standard">Godzina</th>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="todo.html">LO317</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">MXP</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">7:30</td>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="lot1.html">LO3839</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">GDN</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">12:00</td>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="todo.html">EK180</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">DXB</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">13:20</td>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="lot2.html">LH180</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">MUC</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">17:20</td>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="todo.html">QR262</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">DOH</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">21:30</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 
-    <p id="trzeci">Ale super lot</p>
+<div id="opoznienia">
+    <header>Opóźnienia</header>
+    <p id="pierwszy">Opóźnienia mogą ulec zmianie!</p>
     <table class="table-standard">
         <tbody>
         <tr>
@@ -26,23 +103,74 @@
             <th class="table-header-standard">Dokąd</th>
             <th class="table-header-standard">Data</th>
             <th class="table-header-standard">Godzina</th>
+            <th class="table-header-standard">Opóźnienie</th>
         </tr>
-        <tr>
-            <td class="table-row-standard"><a href="lot1.html">LO3839</a></td>
+        <tr class="cancelled">
+            <td class="table-row-standard"><a href="todo.html">LO317</a></td>
             <td class="table-row-standard">WAW</td>
-            <td class="table-row-standard">GDN</td>
+            <td class="table-row-standard">MXP</td>
             <td class="table-row-standard">05.03.2020</td>
-            <td class="table-row-standard">12:00</td>
+            <td class="table-row-standard">7:30</td>
+            <td class="table-row-standard">Odwołany</td>
         </tr>
-        <tr>
+        <tr class="midDelayed">
+            <td class="table-row-standard"><a href="todo.html">EK180</a></td>
+            <td class="table-row-standard">WAW</td>
+            <td class="table-row-standard">DXB</td>
+            <td class="table-row-standard">05.03.2020</td>
+            <td class="table-row-standard">13:20</td>
+            <td class="table-row-standard">30 min</td>
+        </tr>
+        <tr class="smallDelayed">
             <td class="table-row-standard"><a href="lot2.html">LH180</a></td>
             <td class="table-row-standard">WAW</td>
             <td class="table-row-standard">MUC</td>
             <td class="table-row-standard">05.03.2020</td>
             <td class="table-row-standard">17:20</td>
+            <td class="table-row-standard">10 min</td>
         </tr>
-        </tbody>
+        <tr class="bigDelayed">
+            <td class="table-row-standard"><a href="todo.html">QR262</a></td>
+            <td class="table-row-standard">WAW</td>
+            <td class="table-row-standard">DOH</td>
+            <td class="table-row-standard">05.03.2020</td>
+            <td class="table-row-standard">21:30</td>
+            <td class="table-row-standard">60 min</td>
+        </tr>
     </table>
+</div>
+
+<div id="bookingForm">
+    <header>Rezerwacja biletów</header>
+    <form method="post" enctype="text/plain" class="ticketForm">
+        <label for="sel1">Skąd:</label>
+            <select name="departure" id="sel1">
+                <option>WAW</option>
+            </select>
+        <label for="sel2">Dokąd:</label>
+            <select name="arrival" id="sel2">
+                <option>DOH</option>
+                <option>DXB</option>
+                <option>GDN</option>
+                <option>MUC</option>
+                <option>MXP</option>
+            </select>
+        <br>
+        <label for="departureDate">Data wylotu:</label>
+        <input type="date" name="depDate"id="departureDate">
+        <br>
+        <label for="returnDate">Data powrotu:</label>
+        <input type="date" name="retDate" id="returnDate">
+        <br>
+        <label for="nameField">Imię:</label>
+        <input type="text" name="name" id="nameField">
+        <br>
+        <label for="surnameField">Nazwisko:</label>
+        <input type="text" name="surname" id="surnameField">
+        <br>
+        <input type="submit" name="submitButton" value="Zarezerwuj">
+        <input type="reset" name="resetButton" value="Wyczyść dane">
+    </form>
 </div>
 
 <footer>

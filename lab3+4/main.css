@@ -5,26 +5,32 @@ footer {
     font-size: 30px;
     width: 100%;
     text-align: center;
+    grid-column-start: 1;
+    grid-column-end: 4;
 }
 
 .table-standard, .table-header-standard, .table-row-standard {
-    margin-top: 50px;
+    font-size: 12px;
+    margin-top: 10px;
     table-layout: auto;
     padding-top: 10px;
-    font-weight: lighter;
     border: 1px solid black;
     border-collapse: collapse;
     text-align: left;
-    width: 100%;
+    width: 90%;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 20px;
 }
 
+
 .table-header-standard, .table-row-standard {
-    width: 20%;
+    width: auto;
 }
 
 body {
+    display: grid;
+    grid-template-columns: 2fr 4fr 5fr;
     text-align: center;
     background-color: aliceblue;
     font-family: sans-serif;
@@ -33,36 +39,44 @@ body {
 
 #pierwszy {
     background-color: aliceblue;
-    width: 50%;
+    width: 60%;
     margin-left: auto;
     margin-right: auto;
+    font-size: 20px;
 }
 
 #drugi {
     background-color: aliceblue;
-    width: 50%;
+    width: 75%;
     margin-left: auto;
     margin-right: auto;
     position: relative;
-    z-index: -1;
+    font-size: 20px;
 }
 
 #trzeci {
     width: 200px;
     position: absolute;
     color: red;
-    top: 70px;
-    left: 25px;
-    font-size: 25px;
+    top: 30px;
+    left: 15px;
+    font-size: 20px;
+    z-index: -1;
 }
 
-#section {
+#flightsList {
     position: relative;
+    grid-row-start: 2;
+    grid-row-end: 4;
 }
 
 header {
     display: block;
     text-align: center;
+    width: 100%;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: serif;
 }
 
 .city {
@@ -111,7 +125,7 @@ header {
     width: 240px;
 }
 
-ul {
+.passengerList ul {
     position: relative;
     font-size: 15px;
     margin-top: 10px;
@@ -121,6 +135,76 @@ ul {
     width: 50%;
 }
 
-li {
+.passengerList li {
     text-align: left;
+}
+
+.cancelled {
+    background-color: red;
+    font-weight: bold;
+}
+
+.bigDelayed {
+    background-color: orange;
+}
+
+.midDelayed {
+    background-color: yellow;
+}
+
+.smallDelayed {
+    background-color: green;
+}
+
+#menu {
+    float: left;
+    text-align: left;
+    font-size: 15px;
+    grid-row-start: 2;
+    grid-row-end: 4;
+}
+
+#menu ul {
+    margin-left: 5px;
+    padding-inline-start: 10px;
+    list-style-type: none;
+    font-variant: small-caps;
+}
+
+#menu a {
+    color: black;
+    text-decoration: none;
+}
+
+#opoznienia {
+    float: right;
+}
+
+#fligtsTable {
+    position: relative;
+}
+
+.flightBody {
+    display: block;
+    text-align: center;
+    background-color: aliceblue;
+    font-family: sans-serif;
+    font-size: 30px;
+}
+
+.logo {
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+#bookingForm {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row: 3;
+}
+
+.ticketForm {
+    margin-top: 10px;
+    text-align: left;
+    font-size: 18px;
 }
