@@ -1,3 +1,4 @@
+
 footer {
     background-color: aliceblue;
     color: green;
@@ -66,6 +67,7 @@ body {
 
 #flightsList {
     position: relative;
+    grid-column: 2;
     grid-row-start: 2;
     grid-row-end: 4;
 }
@@ -137,6 +139,24 @@ header {
 
 .passengerList li {
     text-align: left;
+    background-color: paleturquoise;
+}
+
+.passengerList li:nth-child(even) {
+    background-color: deepskyblue;
+}
+
+.seat {
+    position: relative;
+    background-color: yellow;
+    left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    visibility: hidden;
+}
+
+.passengerList li:hover .seat {
+    visibility: visible;
 }
 
 .cancelled {
@@ -160,16 +180,17 @@ header {
     float: left;
     text-align: left;
     font-size: 15px;
+    grid-column: 1;
     grid-row-start: 2;
     grid-row-end: 4;
 }
 
 #menu ul {
-    margin-left: 5px;
     padding-inline-start: 10px;
     list-style-type: none;
     font-variant: small-caps;
 }
+
 
 #menu a {
     color: black;
@@ -177,7 +198,7 @@ header {
 }
 
 #opoznienia {
-    float: right;
+    grid-column: 3;
 }
 
 #fligtsTable {
@@ -198,8 +219,7 @@ header {
 }
 
 #bookingForm {
-    grid-column-start: 3;
-    grid-column-end: 4;
+    grid-column: 3;
     grid-row: 3;
 }
 
@@ -207,4 +227,90 @@ header {
     margin-top: 10px;
     text-align: left;
     font-size: 18px;
+}
+
+@media only screen and (max-width: 879px) {
+    body {
+        grid-template-columns: auto;
+    }
+
+    #menu {
+        grid-row: 2;
+        grid-column-end: 3;
+    }
+
+    .menuList {
+        margin-left: 30%;
+    }
+
+    #flightsList {
+        grid-row: 3;
+        grid-column: 1;
+    }
+
+    #opoznienia {
+        grid-row: 3;
+        grid-column: 2;
+    }
+
+    #bookingForm {
+        grid-row: 4;
+        grid-column: 2;
+    }
+
+    footer {
+        grid-column-end: 3;
+    }
+}
+
+@media only screen and (max-width: 479px) {
+    body {
+        grid-template-columns: auto;
+    }
+
+    #menu {
+        grid-row: 2;
+        grid-column: 1;
+    }
+
+    #flightsList {
+        grid-row: 3;
+        grid-column: 1;
+    }
+
+    #opoznienia {
+        grid-row: 4;
+        grid-column: 1;
+    }
+
+    #bookingForm {
+        grid-row: 5;
+        grid-column: 1;
+    }
+
+    .logo {
+        grid-column: 1;
+    }
+
+    .weather {
+        display: none !important;
+    }
+
+    .passengerList ul {
+        margin-left: -150px;
+    }
+
+    .city {
+        display: none !important;
+    }
+
+    footer {
+        grid-column: 1;
+    }
+}
+
+@media only screen and (max-width: 360px) {
+    .logo {
+        width: 100%;
+    }
 }

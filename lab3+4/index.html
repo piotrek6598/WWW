@@ -18,7 +18,7 @@
 </div>
 <div id="menu">
     <header>Menu</header>
-    <ul>
+    <ul class="menuList">
         <li><a href="index.html">Lista lotów</a></li>
         <li><a href="#flightsList">Informacje o lotach</a>
             <ul>
@@ -144,20 +144,20 @@
     <header>Rezerwacja biletów</header>
     <form method="post" enctype="text/plain" class="ticketForm">
         <label for="sel1">Skąd:</label>
-            <select name="departure" id="sel1">
-                <option>WAW</option>
-            </select>
+        <select name="departure" id="sel1">
+            <option>WAW</option>
+        </select>
         <label for="sel2">Dokąd:</label>
-            <select name="arrival" id="sel2">
-                <option>DOH</option>
-                <option>DXB</option>
-                <option>GDN</option>
-                <option>MUC</option>
-                <option>MXP</option>
-            </select>
+        <select name="arrival" id="sel2">
+            <option>DOH</option>
+            <option>DXB</option>
+            <option>GDN</option>
+            <option>MUC</option>
+            <option>MXP</option>
+        </select>
         <br>
         <label for="departureDate">Data wylotu:</label>
-        <input type="date" name="depDate"id="departureDate">
+        <input type="date" name="depDate" id="departureDate">
         <br>
         <label for="returnDate">Data powrotu:</label>
         <input type="date" name="retDate" id="returnDate">
