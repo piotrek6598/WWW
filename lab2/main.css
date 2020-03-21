@@ -7,7 +7,7 @@ footer {
     text-align: center;
 }
 
-table, th, td {
+.table-standard, .table-header-standard, .table-row-standard {
     margin-top: 50px;
     table-layout: auto;
     padding-top: 10px;
@@ -20,7 +20,7 @@ table, th, td {
     margin-right: auto;
 }
 
-th, td {
+.table-header-standard, .table-row-standard {
     width: 20%;
 }
 
