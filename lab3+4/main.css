@@ -1,3 +1,25 @@
+/** Main part description.
+ */
+body {
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: 200px 3fr 1fr;
+    grid-column-gap: 15px;
+    text-align: center;
+    background-color: aliceblue;
+    font-family: sans-serif;
+    font-size: 30px;
+}
+
+header {
+    display: block;
+    text-align: center;
+    width: 100%;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: serif;
+}
+
 
 footer {
     background-color: aliceblue;
@@ -29,23 +51,48 @@ footer {
     width: auto;
 }
 
-body {
-    max-width: 1500px;
-    display: grid;
-    grid-template-columns: 200px 3fr 1fr;
-    grid-column-gap: 15px;
-    text-align: center;
-    background-color: aliceblue;
-    font-family: sans-serif;
-    font-size: 30px;
+/** Logo description.
+ */
+.logo {
+    grid-column-start: 1;
+    grid-column-end: 4;
 }
 
-#pierwszy {
-    background-color: aliceblue;
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 20px;
+/** Menu part description.
+ */
+#menu {
+    float: left;
+    text-align: left;
+    font-size: 15px;
+    grid-column: 1;
+    grid-row-start: 2;
+    grid-row-end: 4;
+}
+
+#menu ul {
+    padding-inline-start: 10px;
+    list-style-type: none;
+    font-variant: small-caps;
+}
+
+#menu a:hover {
+    color: #ffb900;
+    font-weight: bold;
+}
+
+
+#menu a {
+    color: black;
+    text-decoration: none;
+}
+
+/** Flights list description.
+ */
+#flightsList {
+    position: relative;
+    grid-column: 2;
+    grid-row-start: 2;
+    grid-row-end: 4;
 }
 
 #drugi {
@@ -55,6 +102,10 @@ body {
     margin-right: auto;
     position: relative;
     font-size: 20px;
+}
+
+#fligtsTable {
+    position: relative;
 }
 
 #trzeci {
@@ -67,20 +118,84 @@ body {
     z-index: -1;
 }
 
-#flightsList {
-    position: relative;
-    grid-column: 2;
-    grid-row-start: 2;
+/** Delays part description.
+ */
+#opoznienia {
+    grid-column: 3;
+}
+
+#pierwszy {
+    background-color: aliceblue;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+}
+
+.cancelled {
+    background-color: red;
+    font-weight: bold;
+}
+
+.bigDelayed {
+    background-color: orange;
+}
+
+.midDelayed {
+    background-color: yellow;
+}
+
+.smallDelayed {
+    background-color: green;
+}
+
+/** Booking part description.
+ */
+#bookingForm {
+    grid-column: 3;
+    grid-row-start: 3;
     grid-row-end: 4;
 }
 
-header {
+.ticketForm {
+    margin-top: 10px;
+    text-align: left;
+    font-size: 18px;
+}
+
+.popup-booking {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.popup-message {
+    position: relative;
+    top: 30%;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+    background-color: blue;
+}
+
+.popup-message a {
+    text-decoration: none;
+    color: black;
+}
+
+/** Flight's website body part description.
+ */
+.flightBody {
+    max-width: 1000px;
     display: block;
     text-align: center;
-    width: 100%;
-    font-size: 40px;
-    font-weight: bold;
-    font-family: serif;
+    background-color: aliceblue;
+    font-family: sans-serif;
+    font-size: 30px;
 }
 
 .city {
@@ -162,101 +277,8 @@ header {
     visibility: visible;
 }
 
-.cancelled {
-    background-color: red;
-    font-weight: bold;
-}
-
-.bigDelayed {
-    background-color: orange;
-}
-
-.midDelayed {
-    background-color: yellow;
-}
-
-.smallDelayed {
-    background-color: green;
-}
-
-#menu {
-    float: left;
-    text-align: left;
-    font-size: 15px;
-    grid-column: 1;
-    grid-row-start: 2;
-    grid-row-end: 4;
-}
-
-#menu ul {
-    padding-inline-start: 10px;
-    list-style-type: none;
-    font-variant: small-caps;
-}
-
-
-#menu a {
-    color: black;
-    text-decoration: none;
-}
-
-#opoznienia {
-    grid-column: 3;
-}
-
-#fligtsTable {
-    position: relative;
-}
-
-.flightBody {
-    max-width: 1000px;
-    display: block;
-    text-align: center;
-    background-color: aliceblue;
-    font-family: sans-serif;
-    font-size: 30px;
-}
-
-.logo {
-    grid-column-start: 1;
-    grid-column-end: 4;
-}
-
-.popup-booking {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 2;
-    background: rgba(255, 255, 255, 0.5);
-}
-
-.popup-message {
-    position: relative;
-    top: 30%;
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
-    border: 1px solid black;
-    border-collapse: collapse;
-    background-color: blue;
-}
-
-.popup-message a {
-    text-decoration: none;
-    color: black;
-}
-
-#bookingForm {
-    grid-column: 3;
-    grid-row: 3;
-}
-
-.ticketForm {
-    margin-top: 10px;
-    text-align: left;
-    font-size: 18px;
-}
-
+/** View for tablets.
+ */
 @media only screen and (max-width: 879px) {
     body {
         grid-template-columns: auto;
@@ -295,6 +317,8 @@ header {
     }
 }
 
+/** View for smartphone.
+ */
 @media only screen and (max-width: 479px) {
     body {
         grid-template-columns: auto;
@@ -345,6 +369,8 @@ header {
     }
 }
 
+/** View for small smartphone.
+ */
 @media only screen and (max-width: 360px) {
     .logo {
         width: 100%;
