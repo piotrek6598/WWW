@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Lista lotów</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+
+<body>
+
+<div class="logo">
+    <header>
+        <img src="images/logo.jpg" class="logo" alt="logo firmy">
+    </header>
+</div>
+<div id="menu">
+    <header>Menu</header>
+    <ul class="menuList">
+        <li><a href="index.html">Lista lotów</a></li>
+        <li><a href="#flightsList">Informacje o lotach</a>
+            <ul>
+                <li><a href="LO317.html">LO317</a></li>
+                <li><a href="lot1.html">LO3839</a></li>
+                <li><a href="lot2.html">LH1615</a></li>
+                <li><a href="EK180.html">EK180</a></li>
+                <li><a href="QR262.html">QR262</a></li>
+            </ul>
+        </li>
+        <li><a href="#bookingForm">Bilety</a>
+            <ul>
+                <li><a href="#bookingForm">Zakup biletów</a></li>
+                <li><a href="#bookingForm">Zmiana biletów</a></li>
+                <li><a href="#bookingForm">Zwrot biletów</a></li>
+            </ul>
+        </li>
+        <li><a href="#opoznienia">Opóźnienia</a></li>
+    </ul>
+</div>
+<div id="flightsList">
+    <header>Lista lotów</header>
+    <p id="drugi">Lista zawiera tylko dzisiejsze loty</p>
+    <div id="fligtsTable">
+        <p id="trzeci">Ale super lot</p>
+        <table class="table-standard">
+            <tbody>
+            <tr>
+                <th class="table-header-standard">Nr lotu</th>
+                <th class="table-header-standard">Skąd</th>
+                <th class="table-header-standard">Dokąd</th>
+                <th class="table-header-standard">Data</th>
+                <th class="table-header-standard">Godzina</th>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="LO317.html">LO317</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">MXP</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">7:30</td>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="lot1.html">LO3839</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">GDN</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">12:00</td>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="EK180.html">EK180</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">DXB</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">13:20</td>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="lot2.html">LH1615</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">MUC</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">16:50</td>
+            </tr>
+            <tr>
+                <td class="table-row-standard"><a href="QR262.html">QR262</a></td>
+                <td class="table-row-standard">WAW</td>
+                <td class="table-row-standard">DOH</td>
+                <td class="table-row-standard">05.03.2020</td>
+                <td class="table-row-standard">21:30</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="opoznienia">
+    <header>Opóźnienia</header>
+    <p id="pierwszy">Opóźnienia mogą ulec zmianie!</p>
+    <table class="table-standard">
+        <tbody>
+        <tr>
+            <th class="table-header-standard">Nr lotu</th>
+            <th class="table-header-standard">Skąd</th>
+            <th class="table-header-standard">Dokąd</th>
+            <th class="table-header-standard">Data</th>
+            <th class="table-header-standard">Godzina</th>
+            <th class="table-header-standard">Opóźnienie</th>
+        </tr>
+        <tr class="cancelled">
+            <td class="table-row-standard"><a href="LO317.html">LO317</a></td>
+            <td class="table-row-standard">WAW</td>
+            <td class="table-row-standard">MXP</td>
+            <td class="table-row-standard">05.03.2020</td>
+            <td class="table-row-standard">7:30</td>
+            <td class="table-row-standard">Odwołany</td>
+        </tr>
+        <tr class="midDelayed">
+            <td class="table-row-standard"><a href="EK180.html">EK180</a></td>
+            <td class="table-row-standard">WAW</td>
+            <td class="table-row-standard">DXB</td>
+            <td class="table-row-standard">05.03.2020</td>
+            <td class="table-row-standard">13:20</td>
+            <td class="table-row-standard">30 min</td>
+        </tr>
+        <tr class="smallDelayed">
+            <td class="table-row-standard"><a href="lot2.html">LH1615</a></td>
+            <td class="table-row-standard">WAW</td>
+            <td class="table-row-standard">MUC</td>
+            <td class="table-row-standard">05.03.2020</td>
+            <td class="table-row-standard">16:50</td>
+            <td class="table-row-standard">10 min</td>
+        </tr>
+        <tr class="bigDelayed">
+            <td class="table-row-standard"><a href="QR262.html">QR262</a></td>
+            <td class="table-row-standard">WAW</td>
+            <td class="table-row-standard">DOH</td>
+            <td class="table-row-standard">05.03.2020</td>
+            <td class="table-row-standard">21:30</td>
+            <td class="table-row-standard">60 min</td>
+        </tr>
+    </table>
+</div>
+
+<div id="bookingForm">
+    <header>Rezerwacja biletów</header>
+    <form action="index2.html" method="post" enctype="text/plain" class="ticketForm">
+        <label for="sel1">Skąd:</label>
+        <select name="departure" id="sel1">
+            <option>WAW</option>
+        </select>
+        <label for="sel2">Dokąd:</label>
+        <select name="arrival" id="sel2">
+            <option>DOH</option>
+            <option>DXB</option>
+            <option>GDN</option>
+            <option>MUC</option>
+            <option>MXP</option>
+        </select>
+        <br>
+        <label for="departureDate">Data wylotu:</label>
+        <input type="date" name="depDate" id="departureDate">
+        <br>
+        <label for="returnDate">Data powrotu:</label>
+        <input type="date" name="retDate" id="returnDate">
+        <br>
+        <label for="nameField">Imię:</label>
+        <input type="text" name="name" id="nameField">
+        <br>
+        <label for="surnameField">Nazwisko:</label>
+        <input type="text" name="surname" id="surnameField">
+        <br>
+        <input type="submit" name="submitButton" value="Zarezerwuj">
+        <input type="reset" name="resetButton" value="Wyczyść dane">
+    </form>
+</div>
+
+<footer>
+    <p>Author: Piotr Jasiński</p>
+</footer>
+
+</body>
+</html>

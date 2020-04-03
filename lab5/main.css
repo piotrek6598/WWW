@@ -1,0 +1,378 @@
+/** Main part description.
+ */
+body {
+    max-width: 1500px;
+    display: grid;
+    grid-template-columns: 200px 3fr 1fr;
+    grid-column-gap: 15px;
+    text-align: center;
+    background-color: aliceblue;
+    font-family: sans-serif;
+    font-size: 30px;
+}
+
+header {
+    display: block;
+    text-align: center;
+    width: 100%;
+    font-size: 40px;
+    font-weight: bold;
+    font-family: serif;
+}
+
+
+footer {
+    background-color: aliceblue;
+    color: green;
+    font-family: sans-serif;
+    font-size: 30px;
+    width: 100%;
+    text-align: center;
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+.table-standard, .table-header-standard, .table-row-standard {
+    font-size: 12px;
+    margin-top: 10px;
+    table-layout: auto;
+    padding-top: 10px;
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: left;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
+
+
+.table-header-standard, .table-row-standard {
+    width: auto;
+}
+
+/** Logo description.
+ */
+.logo {
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+/** Menu part description.
+ */
+#menu {
+    float: left;
+    text-align: left;
+    font-size: 15px;
+    grid-column: 1;
+    grid-row-start: 2;
+    grid-row-end: 4;
+}
+
+#menu ul {
+    padding-inline-start: 10px;
+    list-style-type: none;
+    font-variant: small-caps;
+}
+
+#menu a:hover {
+    color: #ffb900;
+    font-weight: bold;
+}
+
+
+#menu a {
+    color: black;
+    text-decoration: none;
+}
+
+/** Flights list description.
+ */
+#flightsList {
+    position: relative;
+    grid-column: 2;
+    grid-row-start: 2;
+    grid-row-end: 4;
+}
+
+#drugi {
+    background-color: aliceblue;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    font-size: 20px;
+}
+
+#fligtsTable {
+    position: relative;
+}
+
+#trzeci {
+    width: 200px;
+    position: absolute;
+    color: red;
+    top: 30px;
+    left: 15px;
+    font-size: 20px;
+    z-index: -1;
+}
+
+/** Delays part description.
+ */
+#opoznienia {
+    grid-column: 3;
+}
+
+#pierwszy {
+    background-color: aliceblue;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 20px;
+}
+
+.cancelled {
+    background-color: red;
+    font-weight: bold;
+}
+
+.bigDelayed {
+    background-color: orange;
+}
+
+.midDelayed {
+    background-color: yellow;
+}
+
+.smallDelayed {
+    background-color: green;
+}
+
+/** Booking part description.
+ */
+#bookingForm {
+    grid-column: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+.ticketForm {
+    margin-top: 10px;
+    text-align: left;
+    font-size: 18px;
+}
+
+.popup-booking {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.popup-message {
+    position: relative;
+    top: 30%;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+    background-color: blue;
+}
+
+.popup-message a {
+    text-decoration: none;
+    color: black;
+}
+
+/** Flight's website body part description.
+ */
+.flightBody {
+    max-width: 1000px;
+    display: block;
+    text-align: center;
+    background-color: aliceblue;
+    font-family: sans-serif;
+    font-size: 30px;
+}
+
+.city {
+    height: 299px;
+    width: 217px;
+}
+
+.flightnum {
+    font-size: 20px;
+    width: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.cities {
+    font-size: 25px;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.aircraftinfo {
+    font-size: 15px;
+    color: blue;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.aircraft {
+    width: 300px;
+    height: 180px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.weather {
+    height: 180px;
+    width: 240px;
+}
+
+.passengerList ul {
+    position: relative;
+    font-size: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    left: 50%;
+    margin-left: -200px;
+    width: 40%;
+}
+
+.passengerList li {
+    min-width: 280px;
+    text-align: left;
+    background-color: paleturquoise;
+}
+
+.passengerList li:nth-child(even) {
+    background-color: deepskyblue;
+}
+
+.seat {
+    position: relative;
+    background-color: yellow;
+    left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    visibility: hidden;
+}
+
+.passengerList li:hover .seat {
+    visibility: visible;
+}
+
+/** View for tablets.
+ */
+@media only screen and (max-width: 879px) {
+    body {
+        grid-template-columns: auto;
+    }
+
+    #menu {
+        grid-row: 2;
+        grid-column-end: 3;
+    }
+
+    .menuList {
+        margin-left: 30%;
+    }
+
+    #flightsList {
+        grid-row: 3;
+        grid-column: 1;
+    }
+
+    #opoznienia {
+        grid-row: 3;
+        grid-column: 2;
+    }
+
+    #bookingForm {
+        grid-row: 4;
+        grid-column: 2;
+    }
+
+    .passengerList ul {
+        width: 50%;
+    }
+
+    footer {
+        grid-column-end: 3;
+    }
+}
+
+/** View for smartphone.
+ */
+@media only screen and (max-width: 479px) {
+    body {
+        grid-template-columns: auto;
+    }
+
+    #menu {
+        grid-row: 2;
+        grid-column: 1;
+    }
+
+    .menuList {
+        margin-left: 20%;
+    }
+
+    #flightsList {
+        grid-row: 3;
+        grid-column: 1;
+    }
+
+    #opoznienia {
+        grid-row: 4;
+        grid-column: 1;
+    }
+
+    #bookingForm {
+        grid-row: 5;
+        grid-column: 1;
+    }
+
+    .logo {
+        grid-column: 1;
+    }
+
+    .weather {
+        display: none !important;
+    }
+
+    .passengerList ul {
+        margin-left: -150px;
+    }
+
+    .city {
+        display: none !important;
+    }
+
+    footer {
+        grid-column: 1;
+    }
+}
+
+/** View for small smartphone.
+ */
+@media only screen and (max-width: 360px) {
+    .logo {
+        width: 100%;
+    }
+}
