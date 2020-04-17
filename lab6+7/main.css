@@ -32,7 +32,7 @@ footer {
     grid-column-end: 4;
 }
 
-.table-standard, .table-header-standard, .table-row-standard {
+.table-standard, .table-header-standard, .table-row-standard, .list-table, .table-opoznienia{
     font-size: 12px;
     margin-top: 10px;
     table-layout: auto;
@@ -163,15 +163,16 @@ footer {
     font-size: 18px;
 }
 
-.popup-booking {
+#popup-booking {
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: 2;
+    z-index: 1;
     background: rgba(255, 255, 255, 0.5);
+    display: none;
 }
 
-.popup-message {
+#popup-message {
     position: relative;
     top: 30%;
     width: 60%;

@@ -6,7 +6,6 @@
     <title>Lista lotów</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
-    <script src='main.js'></script>
 </head>
 
 <body>
@@ -17,8 +16,9 @@
     </header>
 </div>
 
-<div class="popup-booking">
-    <p class="popup-message">Rezerwacja pomyślna<br><a href="index.html">Wróć</a></p>
+
+<div id="popup-booking">
+    <p id="popup-message">Rezerwacja pomyślna</p>
 </div>
 
 <div id="menu">
@@ -49,7 +49,7 @@
     <p id="drugi">Lista zawiera tylko dzisiejsze loty</p>
     <div id="fligtsTable">
         <p id="trzeci">Ale super lot</p>
-        <table class="table-standard">
+        <table class="list-table">
             <tbody>
             <tr>
                 <th class="table-header-standard">Nr lotu</th>
@@ -101,7 +101,7 @@
 <div id="opoznienia">
     <header>Opóźnienia</header>
     <p id="pierwszy">Opóźnienia mogą ulec zmianie!</p>
-    <table class="table-standard">
+    <table class="table-opoznienia">
         <tbody>
         <tr>
             <th class="table-header-standard">Nr lotu</th>
@@ -148,7 +148,7 @@
 
 <div id="bookingForm">
     <header>Rezerwacja biletów</header>
-    <form method="post" enctype="text/plain" class="ticketForm">
+    <form action="javascript: submitForm();" method="post" enctype="text/plain" class="ticketForm">
         <label for="sel1">Skąd:</label>
         <select name="departure" id="sel1">
             <option>WAW</option>
@@ -174,7 +174,7 @@
         <label for="surnameField">Nazwisko:</label>
         <input type="text" name="surname" id="surnameField">
         <br>
-        <input type="submit" name="submitButton" value="Zarezerwuj">
+        <input type="submit" name="submitButton" value="Zarezerwuj" class="submitButton">
         <input type="reset" name="resetButton" value="Wyczyść dane">
     </form>
 </div>
@@ -184,4 +184,6 @@
 </footer>
 
 </body>
+
+<script type="module" src='main.js'></script>
 </html>
