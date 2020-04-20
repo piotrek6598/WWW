@@ -6,6 +6,12 @@
     <title>Lista lotów</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('input[name=name]').value = "Jan";
+            document.querySelector('input[name=surname').value = "Kowalski";
+        });
+    </script>
 </head>
 
 <body>
@@ -175,6 +181,26 @@
         <input type="text" name="surname" id="surnameField">
         <br>
         <input type="submit" name="submitButton" value="Zarezerwuj" class="submitButton">
+        <script>
+            let imie = document.getElementById("nameField");
+            let nazw = document.getElementById("surnameField");
+            let depDate = document.getElementById("departureDate");
+            let retDate = document.getElementById("returnDate");
+
+            let popup = document.getElementById("popup-booking");
+            let popupmsg = document.getElementById("popup-message");
+
+            function submitForm() {
+                popup.style.display = 'block';
+                if (imie.value === "" || nazw.value === "") {
+                    popupmsg.innerText = "Nieprawidłowe dane pasażera";
+                } else if (depDate === "" || retDate === "" || new Date(depDate.value) < new Date() || new Date(retDate.value) < new Date(depDate.value)) {
+                    popupmsg.innerText = "Nieprawidłowa data";
+                } else {
+                    popupmsg.innerText = "Rezerwacja pomyślna (" + imie.value + " " + nazw.value + ", wylot: " + depDate.value + ", powrot: " + retDate.value + ")";
+                }
+            }
+        </script>
         <input type="reset" name="resetButton" value="Wyczyść dane">
     </form>
 </div>

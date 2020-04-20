@@ -1,24 +1,13 @@
 import {fib} from "./fib2.js";
+
 let imie = document.getElementById("nameField");
 let nazw = document.getElementById("surnameField");
 let depDate = document.getElementById("departureDate");
 let retDate = document.getElementById("returnDate");
 
 let popup = document.getElementById("popup-booking");
-let popupmsg = document.getElementById("popup-message");
 
 popup.onclick = () => popup.style.display = 'none';
-
-function submitForm() {
-    popup.style.display = 'block';
-    if (imie.value === "" || nazw.value === "") {
-        popupmsg.innerText = "Nieprawidłowe dane pasażera";
-    } else if (new Date(depDate.value) < new Date() || new Date(retDate.value) < new Date(depDate.value)) {
-        popupmsg.innerText = "Nieprawidłowa data";
-    } else {
-        popupmsg.innerText = "Rezerwacja pomyślna";
-    }
-}
 
 let nowyAkapit = document.createElement('DIV');
 nowyAkapit.innerHTML = "nowy akapit";
@@ -35,6 +24,7 @@ function nowa_promisa(ms) {
 }
 
 let kolory = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'purple', 'gold'];
+
 function teczowe_kolory(el) {
     let promisa = new Promise(resolve => resolve());
     kolory.forEach(color => {
@@ -69,17 +59,19 @@ tabela.addEventListener("click", ev => {
 });
 
 function check_form() {
-    if (imie.value === "" || nazw.value === "" || new Date(depDate.value) < new Date() || new Date(retDate.value) < new Date(depDate.value))
-        return false;
-    return true;
+    return !(imie.value === "" || nazw.value === "" || depDate.value === "" || retDate.value === ""
+        || new Date(depDate.value) < new Date() || new Date(retDate.value) < new Date(depDate.value));
+
 }
 
 let submitButton = document.querySelector('.submitButton');
 submitButton.disabled = true;
+
 function try_make_form_active() {
     if (check_form())
         submitButton.disabled = false;
 }
+
 imie.addEventListener("input", try_make_form_active);
 nazw.addEventListener("input", try_make_form_active);
 depDate.addEventListener("input", try_make_form_active);
