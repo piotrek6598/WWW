@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quizy algebraiczne</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+</head>
+<body>
+
+<header>
+    Witaj w Quizach algebraicznych
+</header>
+
+<div class="quizChoiseBox">
+    <header>
+        Wybierz jeden z poniżej dostępnych Quizów
+    </header>
+
+    <div class="quiz">
+        <header style="color: green">
+            Quiz łatwy
+        </header>
+        <div class="quizDescription">
+            Quiz zawiera 4 zadania algebraiczne do rozwiązania. <br>
+            Każde z nich dotyczy obliczeń na liczbach całkowitych nie większych
+            niż 100. <br>
+        </div>
+
+        <div class="quizScoring">
+            <header>
+                Punktacja: łączny czas spędzony nad pytaniami oraz
+            </header>
+            <ul class="badAnswersPenaltyList">
+                <li class="badAnswerPenaltyDescription">
+                    <span class="penaltyValue"> 20 </span> sekund kary za błędną odpowiedź na pytania 1-2
+                </li>
+                <li class="badAnswerPenaltyDescription">
+                    <span class="penaltyValue"> 10 </span> sekund kary za błędną odpowiedź na pytania 3-4
+                </li>
+            </ul>
+        </div>
+
+        <form action="quiz.html" class="startQuizForm">
+            <input type="submit" class="startButton" onclick="chooseQuiz(1)" value="Zacznij">
+        </form>
+    </div>
+
+    <div class="quiz">
+        <header style="color: orange">
+            Quiz średni
+        </header>
+        <div class="quizDescription">
+            Quiz zawiera 6 zadań algebraicznych do rozwiązania. <br>
+            Każde z nich dotyczy obliczeń na liczbach całkowitych nie większych
+            niż 10 000. <br>
+        </div>
+
+        <div class="quizScoring">
+            <header>
+                Punktacja: łączny czas spędzony nad pytaniami oraz
+            </header>
+            <ul class="badAnswersPenaltyList">
+                <li class="badAnswerPenaltyDescription">
+                    <span class="penaltyValue"> 30 </span> sekund kary za błędną odpowiedź na pytania 1-2
+                </li>
+                <li class="badAnswerPenaltyDescription">
+                    <span class="penaltyValue"> 20 </span> sekund kary za błędną odpowiedź na pytania 3-4
+                </li>
+                <li class="badAnswerPenaltyDescription">
+                    <span class="penaltyValue"> 10 </span> sekund kary za błędną odpowiedż na pytania 5-6
+                </li>
+            </ul>
+        </div>
+
+        <form action="quiz.html" class="startQuizForm">
+            <input type="submit" class="startButton" onclick="chooseQuiz(2)" value="Zacznij">
+        </form>
+    </div>
+
+    <div class="quiz">
+        <header style="color: red">
+            Quiz trudny
+        </header>
+        <div class="quizDescription">
+            Quiz zawiera 4 zadania algebraiczne do rozwiązania. <br>
+            Każde z nich dotyczy obliczeń na liczbach całkowitych. <br>
+        </div>
+
+        <div class="quizScoring">
+            <header>
+                Punktacja: łączny czas spędzony nad pytaniami oraz
+            </header>
+
+            <ul class="badAnswersPenaltyList">
+                <li class="badAnswerPenaltyDescription">
+                    <span class="penaltyValue">30</span> sekund kary za błędną odpowiedź na pytania 1-3
+                </li>
+                <li class="badAnswerPenaltyDescription">
+                    <span class="penaltyValue"> 20 </span> sekund kary za błędną odpowiedź na pytania 4-6
+                </li>
+                <li class="badAnswerPenaltyDescription">
+                    <span class="penaltyValue">15 </span> sekund kary za błędną odpowiedź na pytania 7-8
+                </li>
+            </ul>
+        </div>
+
+        <form action="quiz.html" class="startQuizForm">
+            <input type="submit" class="startButton" onclick="chooseQuiz(3)" value="Zacznij">
+        </form>
+    </div>
+
+</div>
+
+<footer>
+    <hr>
+    Autor: Piotr Jasiński
+</footer>
+
+<script src="main.ts"></script>
+</body>
+</html>
