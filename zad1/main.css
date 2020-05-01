@@ -1,4 +1,4 @@
-body {
+#BodyMainPage {
     font-family: sans-serif;
     font-size: 12px;
     background-color: lightblue;
@@ -16,8 +16,11 @@ header {
 }
 
 footer {
+    grid-column-start: 1;
+    grid-column-end: 3;
     color: red;
     font-size: 12px;
+    margin-top: 60px
 }
 
 footer hr {
@@ -64,4 +67,148 @@ footer hr {
 .penaltyValue {
     font-weight: bold;
     color: red;
+}
+
+#quizIntro {
+    text-align: center;
+}
+
+#BodyQuizPage {
+    font-family: sans-serif;
+    font-size: 15px;
+    background-color: lightblue;
+    display: grid;
+    grid-template-columns: 600px auto;
+    max-width: 1000px;
+    text-align: center;
+}
+
+#quizTitle {
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+#quizIntro {
+    font-size: 18px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    grid-row-start: 2;
+    grid-row-end: 3;
+}
+
+#quizQuestion {
+    font-size: 25px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 3;
+    grid-row-end: 4;
+}
+
+#questionForm {
+    display: grid;
+    position: relative;
+    grid-template-columns: 1fr 200px 1fr;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 4;
+    grid-row-end: 6;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#questionAnswerField {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#questionAnswerField input {
+    text-align: center;
+}
+
+#nextQuestionButton {
+    position: absolute;
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 2;
+    text-align: center;
+}
+
+#prevQuestionButton {
+    position: absolute;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    right: 0;
+    text-align: center;
+    float: left;
+}
+
+#quizSubmitButton {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    text-align: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#questionCounter {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 4;
+}
+
+#questionCounterText {
+    font-size: 18px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+#questionNumber {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#timer {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 5;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#penaltyBox {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 4;
+    grid-row-end: 5;
+}
+
+#penaltyText {
+    font-size: 15px;
+}
+
+#penaltyValue {
+    font-weight: bold;
+    color: red;
+}
+
+#breakQuizBox {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 6;
+    grid-row-end: 7;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+</head>
+<body id="BodyQuizPage">
+
+<header id="quizTitle"></header>
+
+
+<div id="quizIntro"></div>
+
+<div id="questionCounter">
+    <p id="questionCounterText">Pytanie</p> <span id="questionNumber"></span>
+</div>
+<div id="penaltyBox">
+    <span id="penaltyText">Możliwa kara: <span id="penaltyValue"></span> sekund</span>
+</div>
+<div id="quizQuestion"></div>
+<form id="questionForm">
+    <label for="questionAnswerField"></label>
+    <input type="number" name="questionAnswer" id="questionAnswerField"
+           placeholder="Twoja odpowiedź">
+    <input type="submit" name="prevQuestion" id="prevQuestionButton"
+           value="Poprzednie pytanie">
+    <input type="submit" name="quizSubmit" id="quizSubmitButton"
+           value="Zakończ">
+
+    <input type="submit" name="nextQuestion" id="nextQuestionButton"
+           value="Następne pytanie">
+</form>
+
+<div id="timer">
+<p id="timerText">
+    <time>00:00</time>
+</p>
+</div>
+
+<div id="breakQuizBox">
+    <button type="button" name="breakQuizButton">Przerwij Quiz</button>
+</div>
+
+<footer>
+    <hr>
+    Autor: Piotr Jasiński
+</footer>
+
+<script src="main.js"></script>
+</body>
+</html>
