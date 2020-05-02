@@ -5,116 +5,188 @@
     <title>Quizy algebraiczne</title>
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
 </head>
-<body id="BodyMainPage">
-
-<header>
-    Witaj w Quizach algebraicznych
-</header>
-
-<div class="quizChoiseBox">
+<body>
+<div id="BodyMainPage">
     <header>
-        Wybierz jeden z poniżej dostępnych Quizów
+        Witaj w Quizach algebraicznych
     </header>
 
-    <div class="quiz">
-        <header style="color: green">
-            Quiz łatwy
+    <div class="quizChoiseBox">
+        <header>
+            Wybierz jeden z poniżej dostępnych Quizów
         </header>
-        <div class="quizDescription">
-            Quiz zawiera 4 zadania algebraiczne do rozwiązania. <br>
-            Każde z nich dotyczy obliczeń na liczbach całkowitych nie większych
-            niż 100. <br>
-        </div>
 
-        <div class="quizScoring">
-            <header>
-                Punktacja: łączny czas spędzony nad pytaniami oraz
+        <div class="quiz">
+            <header style="color: green">
+                Quiz łatwy
             </header>
-            <ul class="badAnswersPenaltyList">
-                <li class="badAnswerPenaltyDescription">
-                    <span class="penaltyValue"> 20 </span> sekund kary za błędną odpowiedź na pytania 1-2
-                </li>
-                <li class="badAnswerPenaltyDescription">
-                    <span class="penaltyValue"> 10 </span> sekund kary za błędną odpowiedź na pytania 3-4
-                </li>
-            </ul>
+            <div class="quizDescription">
+                Quiz zawiera 4 zadania algebraiczne do rozwiązania. <br>
+                Każde z nich dotyczy obliczeń na liczbach całkowitych nie
+                większych
+                niż 100. <br>
+            </div>
+
+            <div class="quizScoring">
+                <header>
+                    Punktacja: łączny czas spędzony nad pytaniami oraz
+                </header>
+                <ul class="badAnswersPenaltyList">
+                    <li class="badAnswerPenaltyDescription">
+                        <span class="penaltyValue"> 20 </span> sekund kary za
+                        błędną odpowiedź na pytania 1-2
+                    </li>
+                    <li class="badAnswerPenaltyDescription">
+                        <span class="penaltyValue"> 10 </span> sekund kary za
+                        błędną odpowiedź na pytania 3-4
+                    </li>
+                </ul>
+            </div>
+
+            <form class="startQuizForm">
+                <input type="button" class="startButton" onclick="loadQuiz(1)" value="Zacznij">
+            </form>
         </div>
 
-        <form action="quiz.html" class="startQuizForm" target="_blank">
-            <input type="submit" class="startButton" onclick="chooseQuiz(1)" value="Zacznij">
-        </form>
+        <div class="quiz">
+            <header style="color: orange">
+                Quiz średni
+            </header>
+            <div class="quizDescription">
+                Quiz zawiera 6 zadań algebraicznych do rozwiązania. <br>
+                Każde z nich dotyczy obliczeń na liczbach całkowitych nie
+                większych
+                niż 10 000. <br>
+            </div>
+
+            <div class="quizScoring">
+                <header>
+                    Punktacja: łączny czas spędzony nad pytaniami oraz
+                </header>
+                <ul class="badAnswersPenaltyList">
+                    <li class="badAnswerPenaltyDescription">
+                        <span class="penaltyValue"> 30 </span> sekund kary za
+                        błędną odpowiedź na pytania 1-2
+                    </li>
+                    <li class="badAnswerPenaltyDescription">
+                        <span class="penaltyValue"> 20 </span> sekund kary za
+                        błędną odpowiedź na pytania 3-4
+                    </li>
+                    <li class="badAnswerPenaltyDescription">
+                        <span class="penaltyValue"> 10 </span> sekund kary za
+                        błędną odpowiedż na pytania 5-6
+                    </li>
+                </ul>
+            </div>
+
+            <form action="quiz.html" class="startQuizForm">
+                <input type="submit" class="startButton" onclick="chooseQuiz(1)"
+                       value="Zacznij">
+            </form>
+        </div>
+
+        <div class="quiz">
+            <header style="color: red">
+                Quiz trudny
+            </header>
+            <div class="quizDescription">
+                Quiz zawiera 4 zadania algebraiczne do rozwiązania. <br>
+                Każde z nich dotyczy obliczeń na liczbach całkowitych. <br>
+            </div>
+
+            <div class="quizScoring">
+                <header>
+                    Punktacja: łączny czas spędzony nad pytaniami oraz
+                </header>
+
+                <ul class="badAnswersPenaltyList">
+                    <li class="badAnswerPenaltyDescription">
+                        <span class="penaltyValue">30</span> sekund kary za
+                        błędną odpowiedź na pytania 1-3
+                    </li>
+                    <li class="badAnswerPenaltyDescription">
+                        <span class="penaltyValue"> 20 </span> sekund kary za
+                        błędną odpowiedź na pytania 4-6
+                    </li>
+                    <li class="badAnswerPenaltyDescription">
+                        <span class="penaltyValue">15 </span> sekund kary za
+                        błędną odpowiedź na pytania 7-8
+                    </li>
+                </ul>
+            </div>
+
+            <form action="quiz.html" class="startQuizForm">
+                <input type="submit" class="startButton"
+                       onclick="chooseQuiz(1);" value="Zacznij">
+            </form>
+        </div>
     </div>
 
-    <div class="quiz">
-        <header style="color: orange">
-            Quiz średni
-        </header>
-        <div class="quizDescription">
-            Quiz zawiera 6 zadań algebraicznych do rozwiązania. <br>
-            Każde z nich dotyczy obliczeń na liczbach całkowitych nie większych
-            niż 10 000. <br>
-        </div>
-
-        <div class="quizScoring">
-            <header>
-                Punktacja: łączny czas spędzony nad pytaniami oraz
-            </header>
-            <ul class="badAnswersPenaltyList">
-                <li class="badAnswerPenaltyDescription">
-                    <span class="penaltyValue"> 30 </span> sekund kary za błędną odpowiedź na pytania 1-2
-                </li>
-                <li class="badAnswerPenaltyDescription">
-                    <span class="penaltyValue"> 20 </span> sekund kary za błędną odpowiedź na pytania 3-4
-                </li>
-                <li class="badAnswerPenaltyDescription">
-                    <span class="penaltyValue"> 10 </span> sekund kary za błędną odpowiedż na pytania 5-6
-                </li>
-            </ul>
-        </div>
-
-        <form action="quiz.html" class="startQuizForm">
-            <input type="submit" class="startButton" onclick="chooseQuiz(1)" value="Zacznij">
-        </form>
-    </div>
-
-    <div class="quiz">
-        <header style="color: red">
-            Quiz trudny
-        </header>
-        <div class="quizDescription">
-            Quiz zawiera 4 zadania algebraiczne do rozwiązania. <br>
-            Każde z nich dotyczy obliczeń na liczbach całkowitych. <br>
-        </div>
-
-        <div class="quizScoring">
-            <header>
-                Punktacja: łączny czas spędzony nad pytaniami oraz
-            </header>
-
-            <ul class="badAnswersPenaltyList">
-                <li class="badAnswerPenaltyDescription">
-                    <span class="penaltyValue">30</span> sekund kary za błędną odpowiedź na pytania 1-3
-                </li>
-                <li class="badAnswerPenaltyDescription">
-                    <span class="penaltyValue"> 2aa0 </span> sekund kary za błędną odpowiedź na pytania 4-6
-                </li>
-                <li class="badAnswerPenaltyDescription">
-                    <span class="penaltyValue">15 </span> sekund kary za błędną odpowiedź na pytania 7-8
-                </li>aaa
-            </ul>
-        </div>
-
-        <form action="quiz.html" class="startQuizForm">
-            <input type="submit" class="startButton" onclick="chooseQuiz(1);" value="Zacznij">
-        </form>
-    </div>
-
+    <footer>
+        <hr>
+        Autor: Piotr Jasiński
+    </footer>
 </div>
 
-<footer>aaa
-    <hr>
-    Autor: Piotr Jasiński
-</footer>
+<div id="BodyQuizPage">
+    <header id="quizTitle"></header>
+
+
+    <div id="quizIntro"></div>
+
+    <div id="questionCounter">
+        <p id="questionCounterText">Pytanie</p> <span
+            id="questionNumber"></span>
+    </div>
+    <div id="penaltyBox">
+        <span id="penaltyText">Możliwa kara: <span id="penaltyValue"></span> sekund</span>
+    </div>
+    <div id="quizQuestion"></div>
+    <form action="javascript: submitQuestion()" id="questionForm">
+        <label for="questionAnswerField"></label>
+        <input type="number" name="questionAnswer" id="questionAnswerField"
+               placeholder="Twoja odpowiedź">
+        <input type="submit" name="prevQuestion" id="prevQuestionButton"
+               value="Poprzednie pytanie" onclick="tryPrevQuestion()">
+        <input type="submit" name="quizSubmit" id="quizSubmitButton" onclick="tryExitQuiz()"
+               value="Zakończ">
+        <input type="submit" name="nextQuestion" id="nextQuestionButton"
+               value="Następne pytanie" onclick="tryNextQuestion()">
+    </form>
+
+    <div id="timer">
+        <p id="timerText">
+            <time>00:00</time>
+        </p>
+    </div>
+
+    <form id="breakQuizBox">
+        <input type="button" name="breakQuizButton" value="Przerwij Quiz" onclick="breakQuiz()">
+    </form>
+
+    <footer>
+        <hr>
+        Autor: Piotr Jasiński
+    </footer>
+</div>
+
+<div id="BodyQuizSummaryPage">
+    <header>
+        Twoje wyniki:
+    </header>
+    <table id="quizSummary"></table>
+    <div id="badAnswersBox"></div>
+    <div id="scoreBox"></div>
+    <form id="saveResultForm">
+        <input type="submit" name="saveStatistics" onsubmit="saveResultWithStatistic()" value="Zapisz ze statystykami">
+        <input type="submit" name="saveResults" onsubmit="saveOnlyResult()" value="Zapisz tylko wyniki">
+    </form>
+
+    <footer>
+        <hr>
+        Autor: Piotr Jasiński
+    </footer>
+</div>
 
 <script src="main.js"></script>
 </body>
