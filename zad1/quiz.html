@@ -19,17 +19,16 @@
     <span id="penaltyText">Możliwa kara: <span id="penaltyValue"></span> sekund</span>
 </div>
 <div id="quizQuestion"></div>
-<form id="questionForm">
+<form action="javascript: submitQuestion()" id="questionForm">
     <label for="questionAnswerField"></label>
     <input type="number" name="questionAnswer" id="questionAnswerField"
            placeholder="Twoja odpowiedź">
     <input type="submit" name="prevQuestion" id="prevQuestionButton"
-           value="Poprzednie pytanie">
+           value="Poprzednie pytanie" onclick="tryPrevQuestion()">
     <input type="submit" name="quizSubmit" id="quizSubmitButton"
            value="Zakończ">
-
     <input type="submit" name="nextQuestion" id="nextQuestionButton"
-           value="Następne pytanie">
+           value="Następne pytanie" onclick="tryNextQuestion()">
 </form>
 
 <div id="timer">
@@ -38,9 +37,9 @@
 </p>
 </div>
 
-<div id="breakQuizBox">
-    <button type="button" name="breakQuizButton">Przerwij Quiz</button>
-</div>
+<form action="index.html" id="breakQuizBox">
+    <input type="submit" name="breakQuizButton" value="Przerwij Quiz">
+</form>
 
 <footer>
     <hr>
