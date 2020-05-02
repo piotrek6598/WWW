@@ -178,8 +178,8 @@
     <div id="badAnswersBox"></div>
     <div id="scoreBox"></div>
     <form id="saveResultForm">
-        <input type="submit" name="saveStatistics" onsubmit="saveResultWithStatistic()" value="Zapisz ze statystykami">
-        <input type="submit" name="saveResults" onsubmit="saveOnlyResult()" value="Zapisz tylko wyniki">
+        <input type="button" name="saveStatistics" onclick="saveStats(true)" value="Zapisz ze statystykami">
+        <input type="button" name="saveResults" onclick="saveStats(false)" value="Zapisz tylko wyniki">
     </form>
 
     <footer>

@@ -9,7 +9,8 @@ interface Question {
 interface Quiz {
     title: string,
     introduction: string,
-    questions: Question[];
+    questions: Question[],
+    result: number;
 }
 
 let quizProsty: Quiz = {
@@ -44,7 +45,8 @@ let quizProsty: Quiz = {
             penalty: 20,
             secondsSpend: 0
         }
-    ]
+    ],
+    result: 0
 }
 
 interface Stopwatch {
@@ -55,6 +57,15 @@ interface Stopwatch {
 interface timeStamp {
     minutes: number,
     seconds: number;
+}
+
+interface Stats {
+    quizTitle: string,
+    result: number,
+    question_details: {
+        timeSpend: number,
+        penalty: number;
+    }[];
 }
 
 
@@ -123,7 +134,7 @@ function quizSummary() {
         cell = answerRow.insertCell();
         cell.innerHTML = correctAnswer ? "0" : question.penalty.toString();
         if (!correctAnswer) {
-            badAnswer.innerHTML += "<sup>" + (i+1).toString() + " </sup>";
+            badAnswer.innerHTML += "<sup>" + (i + 1).toString() + " </sup>";
             badAnswer.innerHTML += "Twoja odpowiedź to: <span class='userAnswer'>" + question.userAnswer.toString() + "</span>";
             badAnswer.innerHTML += ", poprawna odpowiedź to: <span class='correctAnswer'>" + question.correctAnswer.toString() + "</span>";
             badAnswer.innerHTML += "<br>";
@@ -133,13 +144,15 @@ function quizSummary() {
         totalPenalty += correctAnswer ? 0 : question.penalty;
     }
 
+    selectedQuiz.result = totalTime + totalPenalty;
+
     let score = document.getElementById("scoreBox") as HTMLDivElement;
     score.innerHTML = "Rozwiązanie quizu zajęło ci: " + convertSecondToTTimeText(totalTime) + "<br>";
     score.innerHTML += ", kara za błędne odpowiedzi: " + convertSecondToTTimeText(totalPenalty) + "<br>";
     score.innerHTML += "Twój lączny wynik: " + convertSecondToTTimeText(totalTime + totalPenalty);
 }
 
-function convertSecondToTTimeText(seconds : number) : string {
+function convertSecondToTTimeText(seconds: number): string {
     let minutes = (seconds - seconds % 60) / 60;
     seconds -= minutes * 60;
     let text = "";
@@ -152,7 +165,7 @@ function convertSecondToTTimeText(seconds : number) : string {
     return text
 }
 
-function saveTimeStamp(stopwatch : Stopwatch) {
+function saveTimeStamp(stopwatch: Stopwatch) {
     timestamp.minutes = stopwatch.minutes;
     timestamp.seconds = stopwatch.seconds;
 }
@@ -191,10 +204,14 @@ function loadQuiz(quiz: number) {
     chooseQuiz(quiz);
     document.getElementById("BodyMainPage").style.display = "none";
     document.getElementById("BodyQuizPage").style.display = "grid";
+    nextQuestButton.style.display = "initial";
+    prevQuestButton.style.display = "none";
     quizTitle.innerText = selectedQuiz.title;
     quizIntro.innerText = selectedQuiz.introduction;
     totalQuestions = selectedQuiz.questions.length;
     currQuestion = 1;
+    currQuestionAnswered = false;
+    submitQuizButton.disabled = true;
     loadQuestion(1);
     startTimer(stopwatch);
     answer.addEventListener("input", checkIfAnswerInserted);
@@ -268,6 +285,22 @@ function tryExitQuiz() {
     state = 0;
 }
 
+function createStats(quiz: Quiz, fullStats: boolean): Stats {
+    let stats: Stats = {
+
+        quizTitle: quiz.title,
+        result: quiz.result,
+        question_details: fullStats ? quiz.questions.map(question => {
+            return {
+                timeSpend: question.secondsSpend,
+                penalty: question.correctAnswer == question.userAnswer ? 0 : question.penalty
+            }
+        }) : null
+    }
+
+    return stats;
+}
+
 function prevQuestionFunc() {
     if (currQuestion == totalQuestions)
         nextQuestButton.style.display = "initial";
@@ -302,15 +335,17 @@ function backToMainPageAfterSavingResults() {
     document.getElementById("BodyMainPage").style.display = "grid";
 }
 
-function saveResultWithStatistic() {
-    // TODO
+function saveStats(fullStats: boolean) {
+    console.log("Works");
+    let quizStat = createStats(selectedQuiz, fullStats);
+    console.log(quizStat);
+    let statsList: Stats[] = JSON.parse(localStorage.getItem("stats"));
+    statsList = statsList == null ? [] : statsList;
+    statsList.push(quizStat);
+    localStorage.setItem("stats", JSON.stringify(statsList));
     backToMainPageAfterSavingResults();
 }
 
-function saveOnlyResult() {
-    // TODO
-    backToMainPageAfterSavingResults();
-}
 
 function nextQuestionFunc() {
     if (currQuestion == 1)
