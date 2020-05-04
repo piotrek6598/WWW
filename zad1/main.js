@@ -1,19 +1,4 @@
-interface Question {
-    questionText: string,
-    correctAnswer: number,
-    userAnswer: number,
-    penalty: number,
-    secondsSpend: number;
-}
-
-interface Quiz {
-    title: string,
-    introduction: string,
-    questions: Question[],
-    result: number;
-}
-
-let quizProsty: Quiz = {
+var quizProsty = {
     title: "Quiz prosty",
     introduction: "Liczyć każdy może, ten quiz nauczy cię wykonywać podstawowe działania arytmetyczne",
     questions: [
@@ -47,9 +32,8 @@ let quizProsty: Quiz = {
         }
     ],
     result: 0
-}
-
-let quizSredni: Quiz = {
+};
+var quizSredni = {
     title: "Quiz średni",
     introduction: "Liczyć każdy może, ten quiz sprawdzi jak radzisz sobie z trudniejszymi przykładami",
     questions: [
@@ -97,9 +81,8 @@ let quizSredni: Quiz = {
         }
     ],
     result: 0
-}
-
-let quizTrudny: Quiz = {
+};
+var quizTrudny = {
     title: "Quiz trudny",
     introduction: "Ten quiz sprawdzi czy naprawdę potrafisz liczyć",
     questions: [
@@ -161,167 +144,131 @@ let quizTrudny: Quiz = {
         }
     ],
     result: 0
-}
-
-interface Stopwatch {
-    minutes: number,
-    seconds: number;
-}
-
-interface timeStamp {
-    minutes: number,
-    seconds: number;
-}
-
-interface Stats {
-    quizTitle: string,
-    id: number,
-    result: number,
-    question_details: {
-        timeSpend: number,
-        penalty: number;
-    }[];
-}
-
-
-let selectedQuiz: Quiz = null;
-let currQuestion = 1;
-let answeredQuestions = 0;
-let state = 0;
-let currQuestionAnswered = false;
-let stopwatch: Stopwatch = {minutes: 0, seconds: 0};
-let timestamp: timeStamp = {minutes: 0, seconds: 0};
-let quizes: Quiz[] = [quizProsty, quizSredni, quizTrudny];
-let timer;
-let totalQuestions;
-
-let quizTitle = document.getElementById("quizTitle") as HTMLDivElement;
-let quizIntro = document.getElementById("quizIntro") as HTMLDivElement;
-let quizQuestion = document.getElementById("quizQuestion") as HTMLDivElement;
-let questionNumber = document.getElementById("questionNumber") as HTMLDivElement;
-let penaltyValue = document.getElementById("penaltyValue") as HTMLDivElement;
-let nextQuestButton = document.getElementById("nextQuestionButton") as HTMLSelectElement;
-let prevQuestButton = document.getElementById("prevQuestionButton") as HTMLSelectElement;
-let submitQuizButton = document.getElementById("quizSubmitButton") as HTMLSelectElement;
-let answer = document.getElementById("questionAnswerField") as HTMLInputElement;
-let timerText = document.getElementById("timerText") as HTMLElement;
-let mainPageBody = document.getElementById("BodyMainPage") as HTMLDivElement;
-let quizPageBody = document.getElementById("BodyQuizPage") as HTMLDivElement;
-let quizSummaryPageBody = document.getElementById("BodyQuizSummaryPage") as HTMLDivElement;
-let tableSummary = document.getElementById("quizSummary") as HTMLTableElement;
-let badAnswer = document.getElementById("badAnswersBox") as HTMLDivElement;
-
-let tabletViewport = window.matchMedia("screen and (max-width: 879px)");
-let mobileViewport = window.matchMedia("(max-width: 600px)");
-
+};
+var selectedQuiz = null;
+var currQuestion = 1;
+var answeredQuestions = 0;
+var state = 0;
+var currQuestionAnswered = false;
+var stopwatch = { minutes: 0, seconds: 0 };
+var timestamp = { minutes: 0, seconds: 0 };
+var quizes = [quizProsty, quizSredni, quizTrudny];
+var timer;
+var totalQuestions;
+var quizTitle = document.getElementById("quizTitle");
+var quizIntro = document.getElementById("quizIntro");
+var quizQuestion = document.getElementById("quizQuestion");
+var questionNumber = document.getElementById("questionNumber");
+var penaltyValue = document.getElementById("penaltyValue");
+var nextQuestButton = document.getElementById("nextQuestionButton");
+var prevQuestButton = document.getElementById("prevQuestionButton");
+var submitQuizButton = document.getElementById("quizSubmitButton");
+var answer = document.getElementById("questionAnswerField");
+var timerText = document.getElementById("timerText");
+var mainPageBody = document.getElementById("BodyMainPage");
+var quizPageBody = document.getElementById("BodyQuizPage");
+var quizSummaryPageBody = document.getElementById("BodyQuizSummaryPage");
+var tableSummary = document.getElementById("quizSummary");
+var badAnswer = document.getElementById("badAnswersBox");
+var tabletViewport = window.matchMedia("screen and (max-width: 879px)");
+var mobileViewport = window.matchMedia("(max-width: 600px)");
 prevQuestButton.style.display = "none";
 submitQuizButton.disabled = true;
-
 function setTabletViewport() {
-    let qTexts = document.getElementsByClassName("questionText") as HTMLCollectionOf<HTMLElement>;
-    let qSummaries = document.getElementsByClassName("questionSummary") as HTMLCollectionOf<HTMLElement>;
-    let questionCounter = document.getElementById("questionCounter") as HTMLDivElement;
-    let penaltyBox = document.getElementById("penaltyBox") as HTMLDivElement;
-    let timerBox = document.getElementById("timerBox") as HTMLDivElement;
-
+    var qTexts = document.getElementsByClassName("questionText");
+    var qSummaries = document.getElementsByClassName("questionSummary");
+    var questionCounter = document.getElementById("questionCounter");
+    var penaltyBox = document.getElementById("penaltyBox");
+    var timerBox = document.getElementById("timerBox");
     if (tabletViewport.matches) {
         // Changes in quiz section
         quizPageBody.style.gridTemplateColumns = "1fr";
-
         timerBox.style.display = "none";
         questionCounter.style.display = "none";
         penaltyBox.style.display = "none";
-
         // Changes in summary section
-        for (let i = 0; i < qTexts.length; i++) {
+        for (var i = 0; i < qTexts.length; i++) {
             qTexts[i].style.display = "none";
             qSummaries[i].style.textAlign = "center";
         }
-    } else {
+    }
+    else {
         // Restoring changes in quiz section
         quizPageBody.style.gridTemplateColumns = "600px auto";
-
         questionCounter.style.display = "initial";
         penaltyBox.style.display = "initial";
         timerBox.style.display = "initial";
-
         // Restoring changes in summary section
-        for (let i = 0; i < qTexts.length; i++) {
+        for (var i = 0; i < qTexts.length; i++) {
             qTexts[i].style.display = "initial";
             qSummaries[i].style.textAlign = "left";
         }
     }
 }
-
 function setMobileViewport() {
-    let quizChoiceHeaders = document.getElementsByClassName("quizChoiceBox") as HTMLCollectionOf<HTMLElement>;
-    let quizes = document.getElementsByClassName("quiz") as HTMLCollectionOf<HTMLElement>;
-    let quizScorings = document.getElementsByClassName("quizScoring") as HTMLCollectionOf<HTMLElement>;
-    let penaltyLists = document.getElementsByClassName("badAnswersPenaltyList") as HTMLCollectionOf<HTMLElement>;
-    let questionForm = document.getElementById("questionForm") as HTMLDivElement;
-    let qSummaries = document.getElementsByClassName("questionSummary") as HTMLCollectionOf<HTMLElement>;
-    let score = document.getElementById("scoreBox") as HTMLDivElement;
-
+    var quizChoiceHeaders = document.getElementsByClassName("quizChoiceBox");
+    var quizes = document.getElementsByClassName("quiz");
+    var quizScorings = document.getElementsByClassName("quizScoring");
+    var penaltyLists = document.getElementsByClassName("badAnswersPenaltyList");
+    var questionForm = document.getElementById("questionForm");
+    var qSummaries = document.getElementsByClassName("questionSummary");
+    var score = document.getElementById("scoreBox");
     if (mobileViewport.matches) {
         // Global changes
         document.body.style.fontSize = "10px";
         document.querySelector("header").style.fontSize = "40px";
         document.querySelector("footer").style.fontSize = "10px";
         document.querySelector("footer").style.marginTop = "15px";
-
         // Changes in main section
         mainPageBody.style.fontSize = "10px";
-        for (let i = 0; i < quizChoiceHeaders.length; i++)
+        for (var i = 0; i < quizChoiceHeaders.length; i++)
             quizChoiceHeaders[i].querySelector("header").style.fontSize = "25px";
-        for (let i = 0; i < quizes.length; i++) {
+        for (var i = 0; i < quizes.length; i++) {
             quizes[i].querySelector("header").style.fontSize = "15px";
             quizes[i].style.margin = "30px 20px";
             quizes[i].style.width = "90%";
         }
-        for (let i = 0; i < quizScorings.length; i++)
+        for (var i = 0; i < quizScorings.length; i++)
             quizScorings[i].querySelector("header").style.fontSize = "12px";
-        for (let i = 0; i < penaltyLists.length; i++)
+        for (var i = 0; i < penaltyLists.length; i++)
             penaltyLists[i].style.paddingInlineStart = "20px";
-
         // Changes in quiz section
         quizPageBody.style.fontSize = "12px";
         quizTitle.style.fontSize = "40px";
-        quizIntro.style.display = "none"
+        quizIntro.style.display = "none";
         quizQuestion.style.fontSize = "18px";
         questionForm.style.gridTemplateColumns = "1fr 150px 1fr";
         questionForm.style.gridColumnGap = "10px";
         nextQuestButton.value = ">>>";
         prevQuestButton.value = "<<<";
-
         // Changes in summary section.
         quizSummaryPageBody.style.fontSize = "10px";
         quizSummaryPageBody.querySelector("header").style.fontSize = "40px";
         tableSummary.style.width = "95%";
-        for (let i = 0; i < qSummaries.length; i++)
+        for (var i = 0; i < qSummaries.length; i++)
             qSummaries[i].style.fontSize = "15px";
         badAnswer.style.display = "none";
         score.style.fontSize = "15px";
-    } else {
+    }
+    else {
         // Restoring global changes
         document.body.style.fontSize = "12px";
         document.querySelector("header").style.fontSize = "70px";
         document.querySelector("footer").style.fontSize = "12px";
         document.querySelector("footer").style.marginTop = "40px";
-
         // Restoring changes in main section
         mainPageBody.style.fontSize = "10px";
-        for (let i = 0; i < quizChoiceHeaders.length; i++)
+        for (var i = 0; i < quizChoiceHeaders.length; i++)
             quizChoiceHeaders[i].querySelector("header").style.fontSize = "25px";
-        for (let i = 0; i < quizes.length; i++) {
+        for (var i = 0; i < quizes.length; i++) {
             quizes[i].querySelector("header").style.fontSize = "18px";
             quizes[i].style.margin = "30px auto";
             quizes[i].style.width = "500px";
         }
-        for (let i = 0; i < quizScorings.length; i++)
+        for (var i = 0; i < quizScorings.length; i++)
             quizScorings[i].querySelector("header").style.fontSize = "12px";
-        for (let i = 0; i < penaltyLists.length; i++)
+        for (var i = 0; i < penaltyLists.length; i++)
             penaltyLists[i].style.paddingInlineStart = "25px";
-
         // Restoring changes in quiz section
         quizPageBody.style.fontSize = "15px";
         quizTitle.style.fontSize = "70px";
@@ -331,54 +278,43 @@ function setMobileViewport() {
         questionForm.style.gridColumnGap = "20px";
         nextQuestButton.value = "Następne pytanie";
         prevQuestButton.value = "Poprzednie pytanie";
-
         // Restoring changes in summary section.
         quizSummaryPageBody.style.fontSize = "12px";
         quizSummaryPageBody.querySelector("header").style.fontSize = "70px";
         tableSummary.style.width = "600px";
-        for (let i = 0; i < qSummaries.length; i++)
+        for (var i = 0; i < qSummaries.length; i++)
             qSummaries[i].style.fontSize = "18px";
         badAnswer.style.display = "initial";
         score.style.fontSize = "18px";
     }
 }
-
-function resetStopwatch(stopwatch: Stopwatch) {
+function resetStopwatch(stopwatch) {
     stopwatch.minutes = 0;
     stopwatch.seconds = 0;
 }
-
 // In format mm:ss
-function convertSecondToTimeText(seconds: number): string {
-    let text = "";
-    let minutes = (seconds - seconds % 60) / 60;
-
+function convertSecondToTimeText(seconds) {
+    var text = "";
+    var minutes = (seconds - seconds % 60) / 60;
     seconds -= minutes * 60;
-
     text += minutes < 10 ? "0" : "";
     text += minutes.toString() + ":";
-
     text += seconds < 10 ? "0" : "";
     text += seconds.toString();
-
-    return text
+    return text;
 }
-
-function saveTimeStamp(stopwatch: Stopwatch) {
+function saveTimeStamp(stopwatch) {
     timestamp.minutes = stopwatch.minutes;
     timestamp.seconds = stopwatch.seconds;
 }
-
-function saveAnswer(questionNum: number) {
+function saveAnswer(questionNum) {
     questionNum--;
     selectedQuiz.questions[questionNum].userAnswer = parseInt(answer.value, 10);
     selectedQuiz.questions[questionNum].secondsSpend += (stopwatch.seconds - timestamp.seconds);
     selectedQuiz.questions[questionNum].secondsSpend += (stopwatch.minutes - timestamp.minutes) * 60;
 }
-
-function loadQuestion(questionNum: number) {
+function loadQuestion(questionNum) {
     questionNum--;
-
     answer.value = isNaN(selectedQuiz.questions[questionNum].userAnswer) ?
         "" : selectedQuiz.questions[questionNum].userAnswer.toString();
     quizQuestion.innerText = selectedQuiz.questions[questionNum].questionText;
@@ -387,48 +323,36 @@ function loadQuestion(questionNum: number) {
     printQuestionNumber();
     saveTimeStamp(stopwatch);
 }
-
-function chooseQuiz(quiz: number) {
+function chooseQuiz(quiz) {
     if (quiz > quizes.length) {
         console.log("Bad quiz number");
         return;
     }
-
     selectedQuiz = quizes[quiz - 1];
 }
-
 function printTime() {
-    let timeText: string = "";
-
+    var timeText = "";
     timeText += stopwatch.minutes < 10 ? "0" : "";
     timeText += stopwatch.minutes.toString() + ":";
     timeText += stopwatch.seconds < 10 ? "0" : "";
     timeText += stopwatch.seconds.toString();
-
     timerText.innerText = timeText;
 }
-
-function addSecond(stopwatch: Stopwatch) {
+function addSecond(stopwatch) {
     stopwatch.seconds++;
-
     if (stopwatch.seconds == 60) {
         stopwatch.minutes++;
         stopwatch.seconds = 0;
     }
-
     printTime();
-
     startTimer(stopwatch);
 }
-
-function startTimer(stopwatch: Stopwatch) {
+function startTimer(stopwatch) {
     timer = setTimeout(addSecond, 1000, stopwatch);
 }
-
 function printQuestionNumber() {
     questionNumber.innerText = currQuestion.toString() + " / " + totalQuestions.toString();
 }
-
 function checkIfAnswerInserted() {
     if (answer.value != "" && !currQuestionAnswered) {
         currQuestionAnswered = true;
@@ -438,39 +362,37 @@ function checkIfAnswerInserted() {
         currQuestionAnswered = false;
         answeredQuestions--;
     }
-
-    submitQuizButton.disabled = answeredQuestions != totalQuestions;
+    if (answeredQuestions == totalQuestions)
+        submitQuizButton.disabled = false;
+    else
+        submitQuizButton.disabled = true;
 }
-
-function setQuestionChange(change: number) {
+function setQuestionChange(change) {
     state = change;
 }
-
-function createStats(quiz: Quiz, fullStats: boolean, quizId: number): Stats {
-    return {
+function createStats(quiz, fullStats, quizId) {
+    var stats = {
         quizTitle: quiz.title,
         id: quizId,
         result: quiz.result,
-        question_details: fullStats ? quiz.questions.map(question => {
+        question_details: fullStats ? quiz.questions.map(function (question) {
             return {
                 timeSpend: question.secondsSpend,
                 penalty: question.correctAnswer == question.userAnswer ? 0 : question.penalty
-            }
+            };
         }) : null
     };
+    return stats;
 }
-
 function displayQuestChangeButtons() {
     nextQuestButton.style.display = currQuestion < totalQuestions ? "initial" : "none";
     prevQuestButton.style.display = currQuestion > 1 ? "initial" : "none";
 }
-
-function changeQuestion(change : number) {
+function changeQuestion(change) {
     currQuestion += change;
     displayQuestChangeButtons();
     loadQuestion(currQuestion);
 }
-
 function submitQuestion() {
     saveAnswer(currQuestion);
     if (state == 0)
@@ -478,26 +400,22 @@ function submitQuestion() {
     else
         changeQuestion(state);
 }
-
 function resetQuiz() {
     selectedQuiz.questions.forEach(function (question) {
         question.userAnswer = NaN;
         question.secondsSpend = 0;
-    })
-
+    });
     selectedQuiz = null;
     answer.removeEventListener("input", checkIfAnswerInserted);
     clearTimeout(timer);
     resetStopwatch(stopwatch);
     printTime();
 }
-
 function breakQuiz() {
     resetQuiz();
     quizPageBody.style.display = "none";
     mainPageBody.style.display = "grid";
 }
-
 function backToMainPageAfterSavingResults() {
     resetQuiz();
     tableSummary.innerHTML = "";
@@ -505,32 +423,29 @@ function backToMainPageAfterSavingResults() {
     quizSummaryPageBody.style.display = "none";
     mainPageBody.style.display = "grid";
 }
-
-function saveStats(fullStats: boolean) {
+function saveStats(fullStats) {
     console.log("Works");
-    let statsList: Stats[] = JSON.parse(localStorage.getItem("stats"));
-    let newId;
+    var statsList = JSON.parse(localStorage.getItem("stats"));
+    var newId;
     console.log(statsList == null);
     if (statsList == null) {
         statsList = [];
         newId = 1;
-    } else {
+    }
+    else {
         newId = statsList[statsList.length - 1].id + 1;
     }
-    let quizStat = createStats(selectedQuiz, fullStats, newId);
+    var quizStat = createStats(selectedQuiz, fullStats, newId);
     console.log(quizStat);
     console.log(quizStat.id);
     statsList.push(quizStat);
     localStorage.setItem("stats", JSON.stringify(statsList));
     backToMainPageAfterSavingResults();
 }
-
-function loadQuiz(quiz: number) {
+function loadQuiz(quiz) {
     if (selectedQuiz != null)
         resetQuiz();
-
     chooseQuiz(quiz);
-
     mainPageBody.style.display = "none";
     quizPageBody.style.display = "grid";
     nextQuestButton.style.display = "initial";
@@ -543,74 +458,57 @@ function loadQuiz(quiz: number) {
     currQuestionAnswered = false;
     answeredQuestions = 0;
     state = 0;
-
     resetStopwatch(stopwatch);
     loadQuestion(1);
     startTimer(stopwatch);
-
     answer.addEventListener("input", checkIfAnswerInserted);
     setTabletViewport();
     setMobileViewport();
 }
-
 function quizSummary() {
     quizPageBody.style.display = "none";
     quizSummaryPageBody.style.display = "grid";
-
-    let totalTime = 0 as number;
-    let totalPenalty = 0 as number;
-
-    let headerRow = tableSummary.insertRow();
-
-    for (let i = 0; i < 3; i++)
+    var totalTime = 0;
+    var totalPenalty = 0;
+    var headerRow = tableSummary.insertRow();
+    for (var i = 0; i < 3; i++)
         headerRow.appendChild(document.createElement("TH"));
-
     headerRow.children[0].innerHTML = "Pytanie";
     headerRow.children[1].innerHTML = "Odpowiedź";
     headerRow.children[2].innerHTML = "Kara";
-
-    for (let i = 0; i < selectedQuiz.questions.length; i++) {
-        let answerRow = tableSummary.insertRow();
-        let cell = answerRow.insertCell(); //bylo var
-        let question = selectedQuiz.questions[i]; // bylo var
-        let correctAnswer = question.correctAnswer == question.userAnswer; // bylo var
-
+    for (var i = 0; i < selectedQuiz.questions.length; i++) {
+        var answerRow = tableSummary.insertRow();
+        var cell = answerRow.insertCell(); //bylo var
+        var question = selectedQuiz.questions[i]; // bylo var
+        var correctAnswer = question.correctAnswer == question.userAnswer; // bylo var
         cell.innerHTML = "<span class='questionNumberSummary'>" + (i + 1).toString() + "</span>";
         cell.innerHTML += "<span class='questionText'>: " + question.questionText + "</span>";
         cell.classList.add("questionSummary");
-
         cell = answerRow.insertCell();
         if (correctAnswer)
             cell.classList.add("answerOK");
         else
             cell.classList.add("answerBad");
         cell.innerHTML = correctAnswer ? "OK" : "Zła odpowiedź";
-
         cell = answerRow.insertCell();
         cell.innerHTML = correctAnswer ? "0" : question.penalty.toString();
-
         if (!correctAnswer) {
             badAnswer.innerHTML += "<sup>" + (i + 1).toString() + " </sup>";
             badAnswer.innerHTML += "Twoja odpowiedź to: <span class='userAnswer'>" + question.userAnswer.toString() + "</span>";
             badAnswer.innerHTML += ", poprawna odpowiedź to: <span class='correctAnswer'>" + question.correctAnswer.toString() + "</span>";
             badAnswer.innerHTML += "<br>";
         }
-
         totalTime += question.secondsSpend;
         totalPenalty += correctAnswer ? 0 : question.penalty;
     }
-
     selectedQuiz.result = totalTime + totalPenalty;
-
-    let score = document.getElementById("scoreBox") as HTMLDivElement;
+    var score = document.getElementById("scoreBox");
     score.innerHTML = "Rozwiązanie quizu zajęło ci: " + convertSecondToTimeText(totalTime) + "<br>";
     score.innerHTML += "Kara za błędne odpowiedzi: " + convertSecondToTimeText(totalPenalty) + "<br>";
     score.innerHTML += "Twój lączny wynik: " + convertSecondToTimeText(totalTime + totalPenalty);
-
     setTabletViewport();
     setMobileViewport();
 }
-
 setTabletViewport();
 setMobileViewport();
 tabletViewport.addListener(setTabletViewport);
