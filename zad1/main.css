@@ -27,7 +27,7 @@ footer {
     grid-column-end: 3;
     color: red;
     font-size: 12px;
-    margin-top: 60px
+    margin-top: 40px
 }
 
 footer hr {
@@ -38,13 +38,13 @@ footer hr {
     margin: 10px auto;
 }
 
-.quizChoiseBox {
+.quizChoiceBox {
     text-align: left;
     grid-column-start: 1;
     grid-column-end: 2;
 }
 
-.quizChoiseBox header {
+.quizChoiceBox header {
     font-size: 30px;
 }
 
@@ -135,6 +135,7 @@ footer hr {
     grid-column-end: 3;
     grid-row-start: 1;
     width: 75%;
+    height: 25px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
@@ -150,6 +151,7 @@ footer hr {
     grid-column-end: 4;
     grid-row-start: 2;
     text-align: center;
+    height: 25px;
 }
 
 #prevQuestionButton {
@@ -157,6 +159,7 @@ footer hr {
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 2;
+    height: 25px;
     right: 0;
     text-align: center;
     float: left;
@@ -167,6 +170,7 @@ footer hr {
     grid-column-end: 3;
     text-align: center;
     width: 80%;
+    height: 25px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -189,7 +193,7 @@ footer hr {
     font-weight: bold;
 }
 
-#timer {
+#timerBox {
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 5;
@@ -298,3 +302,4 @@ footer hr {
     margin-top: 15px;
     font-size: 18px;
 }
+

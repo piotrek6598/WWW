@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Quizy algebraiczne</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
 </head>
 <body>
@@ -11,7 +12,7 @@
         Witaj w Quizach algebraicznych
     </header>
 
-    <div class="quizChoiseBox">
+    <div class="quizChoiceBox">
         <header>
             Wybierz jeden z poniżej dostępnych Quizów
         </header>
@@ -33,11 +34,11 @@
                 </header>
                 <ul class="badAnswersPenaltyList">
                     <li class="badAnswerPenaltyDescription">
-                        <span class="penaltyValue"> 20 </span> sekund kary za
+                        <span class="penaltyValue"> 10 </span> sekund kary za
                         błędną odpowiedź na pytania 1-2
                     </li>
                     <li class="badAnswerPenaltyDescription">
-                        <span class="penaltyValue"> 10 </span> sekund kary za
+                        <span class="penaltyValue"> 20 </span> sekund kary za
                         błędną odpowiedź na pytania 3-4
                     </li>
                 </ul>
@@ -65,22 +66,22 @@
                 </header>
                 <ul class="badAnswersPenaltyList">
                     <li class="badAnswerPenaltyDescription">
-                        <span class="penaltyValue"> 30 </span> sekund kary za
+                        <span class="penaltyValue"> 20 </span> sekund kary za
                         błędną odpowiedź na pytania 1-2
                     </li>
                     <li class="badAnswerPenaltyDescription">
-                        <span class="penaltyValue"> 20 </span> sekund kary za
+                        <span class="penaltyValue"> 30 </span> sekund kary za
                         błędną odpowiedź na pytania 3-4
                     </li>
                     <li class="badAnswerPenaltyDescription">
-                        <span class="penaltyValue"> 10 </span> sekund kary za
+                        <span class="penaltyValue"> 40 </span> sekund kary za
                         błędną odpowiedż na pytania 5-6
                     </li>
                 </ul>
             </div>
 
-            <form action="quiz.html" class="startQuizForm">
-                <input type="submit" class="startButton" onclick="chooseQuiz(1)"
+            <form class="startQuizForm">
+                <input type="button" class="startButton" onclick="loadQuiz(2)"
                        value="Zacznij">
             </form>
         </div>
@@ -101,23 +102,23 @@
 
                 <ul class="badAnswersPenaltyList">
                     <li class="badAnswerPenaltyDescription">
-                        <span class="penaltyValue">30</span> sekund kary za
+                        <span class="penaltyValue">25</span> sekund kary za
                         błędną odpowiedź na pytania 1-3
                     </li>
                     <li class="badAnswerPenaltyDescription">
-                        <span class="penaltyValue"> 20 </span> sekund kary za
+                        <span class="penaltyValue">35</span> sekund kary za
                         błędną odpowiedź na pytania 4-6
                     </li>
                     <li class="badAnswerPenaltyDescription">
-                        <span class="penaltyValue">15 </span> sekund kary za
+                        <span class="penaltyValue">50</span> sekund kary za
                         błędną odpowiedź na pytania 7-8
                     </li>
                 </ul>
             </div>
 
-            <form action="quiz.html" class="startQuizForm">
-                <input type="submit" class="startButton"
-                       onclick="chooseQuiz(1);" value="Zacznij">
+            <form class="startQuizForm">
+                <input type="button" class="startButton"
+                       onclick="loadQuiz(3);" value="Zacznij">
             </form>
         </div>
     </div>
@@ -147,14 +148,14 @@
         <input type="number" name="questionAnswer" id="questionAnswerField"
                placeholder="Twoja odpowiedź">
         <input type="submit" name="prevQuestion" id="prevQuestionButton"
-               value="Poprzednie pytanie" onclick="tryPrevQuestion()">
-        <input type="submit" name="quizSubmit" id="quizSubmitButton" onclick="tryExitQuiz()"
+               value="Poprzednie pytanie" onclick="setQuestionChange(-1)">
+        <input type="submit" name="quizSubmit" id="quizSubmitButton" onclick="setQuestionChange(0)"
                value="Zakończ">
         <input type="submit" name="nextQuestion" id="nextQuestionButton"
-               value="Następne pytanie" onclick="tryNextQuestion()">
+               value="Następne pytanie" onclick="setQuestionChange(1)">
     </form>
 
-    <div id="timer">
+    <div id="timerBox">
         <p id="timerText">
             <time>00:00</time>
         </p>
@@ -163,6 +164,8 @@
     <form id="breakQuizBox">
         <input type="button" name="breakQuizButton" value="Przerwij Quiz" onclick="breakQuiz()">
     </form>
+
+    <div id="testBox"></div>
 
     <footer>
         <hr>
