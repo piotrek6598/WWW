@@ -1,0 +1,26 @@
+body {
+  padding: 50px;
+  font: 18px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.mem {
+  height: 150px;
+  margin-bottom: 10px;
+}
+
+.titleMem {
+  height: 300px;
+}
+
+.memPrice {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+label {
+  padding-right: 10px;
+}

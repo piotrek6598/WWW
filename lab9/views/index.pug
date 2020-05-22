@@ -1,0 +1,12 @@
+extends layout
+
+block content
+        h1= message
+        img(class='mem titleMem' src="https://i.pinimg.com/originals/5e/c5/01/5ec50175139d39c8a69f0f8ce3233ea9.jpg")
+        h1="Top 3 Meme list"
+        ul
+            each meme in best_memes
+                li
+                   a(href="meme/" + meme.id) #{meme.name}
+                   p(class='memPrice') Mem's price: #{meme.price}
+                   img(class='mem' src=meme.url)
