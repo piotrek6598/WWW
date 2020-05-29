@@ -1,4 +1,5 @@
 var express = require('express');
+var createError = require('http-errors');
 var router = express.Router();
 
 var limit = 3;
@@ -47,21 +48,25 @@ router.get('/', function (req, res, next) {
     res.render('index', {title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited})
 });
 
-router.get('/meme/:memeId', function (req, res) {
-    if (req.params.memeId >= 1 && req.params.memeId <= 10) {
-        let meme = get_meme(req.params.memeId);
-        res.render('meme', { meme: meme });
+router.get('/meme/:memeId', function (req, res, next) {
+    let meme = get_meme(req.params.memeId);
+    if (meme === undefined) {
+        next(createError(404, "Invalid meme id"));
     } else {
-        res.render('invalid_meme_id');
+        res.render('meme', {meme: meme});
     }
 });
 
-router.post('/meme/:memeId', function (req, res) {
+router.post('/meme/:memeId', function (req, res, next) {
     let meme = get_meme(req.params.memeId);
     let price = req.body.price;
-    meme.change_price(price);
-    console.log(req.body.price);
-    res.render('meme', { meme: meme });
+    if (meme === undefined) {
+        next(createError(404, "Invalid meme id"));
+    } else {
+        meme.change_price(price);
+        console.log(req.body.price);
+        res.render('meme', {meme: meme});
+    }
 });
 
 module.exports = router;
