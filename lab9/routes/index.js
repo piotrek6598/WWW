@@ -1,18 +1,23 @@
 var sqlite3 = require('sqlite3').verbose();
 var express = require('express');
 var createError = require('http-errors');
+var cookieParser = require('cookie-parser');
 var router = express.Router();
 var session = require('express-session');
 
 var limit = 3;
 
-let selected_meme;
+function hashCode(str) {
+    return str.split('').reduce((prevHash, currVal) =>
+        (((prevHash << 5) - prevHash) + currVal.charCodeAt(0))|0, 0);
+}
 
 function create_database() {
     let db = new sqlite3.Database('meme.db');
     db.serialize(function () {
         db.run('CREATE TABLE meme (id INT, name VARCHAR (255), price INT, url VARCHAR (1023))');
-        db.run('CREATE TABLE meme_price (id INT, price INT, day VARCHAR (255), hr VARCHAR (255))');
+        db.run('CREATE TABLE meme_price (id INT, price INT, day VARCHAR (255), hr VARCHAR (255), username VARCHAR(255))');
+        db.run('CREATE TABLE users (username VARCHAR (255), passwd VARCHAR(255), loginCookie INT)');
     });
 
     db.serialize(function () {
@@ -34,8 +39,9 @@ function create_database() {
             params[i] = date.toDateString();
             params[i + 1] = date.toLocaleTimeString();
         }
-        db.run('INSERT INTO meme_price(id, price, day, hr) VALUES ' +
-            '(10, 1000, ?, ?), (9, 1100, ?, ?), (8, 1200, ?, ?), (7, 450, ?, ?), (6, 750, ?, ?), (5, 643, ?, ?), (4, 326, ?, ?), (3, 452, ?, ?), (2, 839, ?, ?), (1, 128, ?, ?);',
+        db.run('INSERT INTO meme_price(id, price, day, hr, username) VALUES ' +
+            '(10, 1000, ?, ?, "owner"), (9, 1100, ?, ?, "owner"), (8, 1200, ?, ?, "owner"), (7, 450, ?, ?, "owner"), (6, 750, ?, ?, "owner"), ' +
+            '(5, 643, ?, ?, "owner"), (4, 326, ?, ?, "owner"), (3, 452, ?, ?, "owner"), (2, 839, ?, ?, "owner"), (1, 128, ?, ?, "owner");',
             params);
     });
 
@@ -88,7 +94,7 @@ function get_meme(memeId) {
 
             db.get('SELECT id, name, price, url FROM meme WHERE id = ?;', [memeId], (err, row) => {
                 if (err) reject(err);
-                resolve(row);
+                else resolve(row);
             });
         });
     });
@@ -103,7 +109,7 @@ function get_top_memes() {
         db.serialize(function () {
             db.all('SELECT * FROM meme ORDER BY price DESC LIMIT ?', [3], (err, rows) => {
                 if (err) reject(err);
-                resolve(rows);
+                else resolve(rows);
             });
         });
     });
@@ -115,9 +121,9 @@ function get_meme_price_history(memeId) {
     let db = new sqlite3.Database('meme.db');
     let result = new Promise((resolve, reject) => {
         db.serialize(function () {
-            db.all('SELECT price, day, hr FROM meme_price WHERE id = ?;', [memeId], (err, rows) => {
+            db.all('SELECT price, day, hr, username FROM meme_price WHERE id = ?;', [memeId], (err, rows) => {
                 if (err) reject(err);
-                resolve(rows);
+                else resolve(rows);
             });
         });
     });
@@ -125,19 +131,75 @@ function get_meme_price_history(memeId) {
     return result;
 }
 
-function change_meme_price(memeId, price) {
+function change_meme_price(memeId, price, usr) {
     let db = new sqlite3.Database('meme.db');
     let result = new Promise((resolve, reject) => {
         db.serialize(function () {
             let date = new Date();
-            db.run('INSERT INTO meme_price (id, price, day, hr) VALUES (?, ?, ?, ?);',
-                [memeId, price, date.toDateString(), date.toLocaleTimeString()]);
+            db.run('INSERT INTO meme_price (id, price, day, hr, username) VALUES (?, ?, ?, ?, ?);',
+                [memeId, price, date.toDateString(), date.toLocaleTimeString(), usr]);
             db.run('UPDATE meme SET price = ? WHERE id = ?', [price, memeId]);
             resolve();
         });
     });
     db.close();
     return result;
+}
+
+function add_user(user, passwd, cookieval) {
+    let db = new sqlite3.Database('meme.db');
+    db.serialize(function () {
+        db.run('INSERT INTO users(username, passwd, loginCookie) VALUES (?, ? ,?)', [user, passwd, cookieval]);
+    });
+    db.close();
+}
+
+function login(user, passwd, cookieVal) {
+    let db = new sqlite3.Database('meme.db');
+    db.serialize(function () {
+        db.run('UPDATE users SET loginCookie = ? WHERE username = ? AND passwd = ?', [cookieVal, user, passwd]);
+    });
+    db.close();
+}
+
+function check_login(user, passwd) {
+    let db = new sqlite3.Database('meme.db');
+    let result = new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.get('SELECT count(*) as find FROM users WHERE username = ? AND passwd = ?', [user, passwd], (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
+    });
+    db.close();
+    return result;
+}
+
+function check_login_cookie(user, cookie) {
+    let db = new sqlite3.Database('meme.db');
+    let result = new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.get('SELECT count(*) as find FROM users WHERE username = ? AND loginCookie = ?', [user, cookie], (err, row) => {
+                if (err) reject(err);
+                else resolve(row);
+            });
+        });
+    });
+    db.close();
+    return result;
+}
+
+function logout_user(user) {
+    let db = new sqlite3.Database('meme.db');
+    db.serialize(function () {
+        db.run('UPDATE users SET loginCookie = -1 WHERE username = ?', [user]);
+    })
+    db.close();
+}
+
+function create_login_cookie() {
+    return Math.floor(Math.random() * 1000);
 }
 
 function hr_to_ms(val) {
@@ -160,8 +222,6 @@ router.get('/', async function (req, res, next) {
     } else {
         req.session.page_views = 1;
     }
-    //console.log(most_expensive_limited);
-    //let most_expensive_limited = memes_list.sort((mem1, mem2) => mem2.prices_history[0].price - mem1.prices_history[0].price).slice(0, limit);
     res.render('index', {title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited, views: req.session.page_views})
 });
 
@@ -178,8 +238,54 @@ router.get('/meme/:memeId', async function (req, res, next) {
         }
         meme.prices_history = await get_meme_price_history(memeId);
         meme.prices_history.sort(compare_price_history_record);
+        let usr = req.cookies.usr;
+        let cookie = req.cookies.ul;
+        if (usr === undefined || cookie === undefined) {
+            res.locals.loggedIn = false;
+        } else {
+            let checked = await check_login_cookie(usr, cookie);
+            if (checked.find == 1) {
+                res.locals.loggedIn = true;
+            } else {
+                res.locals.loggedIn = false;
+            }
+        }
         res.render('meme', {meme: meme, views: req.session.page_views});
     }
+});
+
+router.post('/', async function (req, res) {
+    let most_expensive_limited = await get_top_memes();
+    /*if (req.session.page_views) {
+        req.session.page_views++;
+    } else {
+        req.session.page_views = 1;
+    }*/
+    if (req.body.login == "signup") {
+        let cookie = create_login_cookie();
+        add_user(req.body.username, hashCode(req.body.passwd), cookie);
+        res.cookie('usr', req.body.username);
+        res.cookie('ul', cookie);
+        res.locals.loggedIn = true;
+    } else if (req.body.login == "login") {
+        let cookie = create_login_cookie();
+        let user_find = await check_login(req.body.username, hashCode(req.body.passwd));
+        if (user_find.find == 1) {
+            login(req.body.username, hashCode(req.body.passwd), cookie);
+            res.cookie('usr', req.body.username);
+            res.cookie('ul', cookie);
+            res.locals.loggedIn = true;
+        } else {
+            res.locals.loggedIn = false;
+        }
+    } else {
+        let usr = req.cookies.usr;
+        logout_user(usr);
+        res.clearCookie("usr");
+        res.clearCookie("ul");
+        res.locals.loggedIn = false;
+    }
+    res.render('index', {title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited, views: req.session.page_views})
 });
 
 router.post('/meme/:memeId', async function (req, res, next) {
@@ -189,16 +295,29 @@ router.post('/meme/:memeId', async function (req, res, next) {
     if (meme === undefined) {
         next(createError(404, "Invalid meme id"));
     } else {
-        await change_meme_price(memeId, price);
-        let meme1 = await get_meme(memeId);
+        let meme1;
+        let usr = req.cookies.usr;
+        let cookie = req.cookies.ul;
+        if (usr === undefined || cookie === undefined) {
+            res.locals.loggedIn = false;
+        } else {
+            let checked = await check_login_cookie(usr, cookie);
+            if (checked.find == 1) {
+                res.locals.loggedIn = true;
+                await change_meme_price(memeId, price, usr);
+            } else {
+                res.locals.loggedIn = false;
+            }
+        }
+        meme1 = await get_meme(memeId);
         meme1.prices_history = await get_meme_price_history(memeId);
         meme1.prices_history.sort(compare_price_history_record);
         meme1.price = req.body.price;
-        if (req.session.page_views) {
+        /*if (req.session.page_views) {
             req.session.page_views++;
         } else {
             req.session.page_views = 1;
-        }
+        }*/
         res.render('meme', {meme: meme1, views: req.session.page_views});
     }
 });

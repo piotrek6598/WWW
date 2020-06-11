@@ -6,3 +6,23 @@ html
   body
     block content
     p(class='viewsCounter') You visited this page #{views} time(s).
+    if (locals.loggedIn === true)
+      div
+        form(action='/' method='POST')
+          input(type='hidden' name='login' value='logout')
+          input(type='submit' value='Sign out')
+    else
+      div
+        form(action='/' method='POST')
+          label User
+          input(type='text' name='username' required)
+          br
+          label Password
+          input(type='password' name='passwd' required)
+          br
+          label(for='Login') Log in:
+          input#Login(type='radio' name='login' value='login' checked)
+          label(for='Sigup') Sign up:
+          input#Sigup(type='radio' name='login' value='signup')
+          br
+          input(type='submit' value='Enter')
