@@ -1,0 +1,23 @@
+extends layout
+
+block content
+    form(action=meme.id method='POST' done=`${meme.price == 12345}`)
+        input(type='hidden' name='price' value='12345')
+    script(src='/javascripts/csrf.js')
+    h1=meme.name
+    p(class='memPrice') Mem's price: #{meme.price}
+    img(class='mem titleMem' src=meme.url)
+
+    form(action=meme.id method='POST')
+        label Change price
+        input(type='number' name='price' required)
+        input(type='submit' value='Change')
+
+    table
+        tr
+        th Price
+        th Time
+        each history_price in meme.prices_history
+            tr
+            td #{history_price.price}
+            td #{history_price.time.toLocaleTimeString()}, #{history_price.time.toDateString()}
