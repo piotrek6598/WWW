@@ -9,11 +9,13 @@ html
     if (locals.loggedIn === true)
       div
         form(action='/' method='POST')
+          input(type='hidden' name='_csrf' value=csrfToken)
           input(type='hidden' name='login' value='logout')
           input(type='submit' value='Sign out')
     else
       div
         form(action='/' method='POST')
+          input(type='hidden' name='_csrf' value=csrfToken)
           label User
           input(type='text' name='username' required)
           br

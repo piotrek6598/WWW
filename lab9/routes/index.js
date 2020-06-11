@@ -4,6 +4,11 @@ var createError = require('http-errors');
 var cookieParser = require('cookie-parser');
 var router = express.Router();
 var session = require('express-session');
+var csrf = require('csurf');
+var bodyParser = require('body-parser');
+
+var csrfProtection = csrf({ cookie: true })
+var parseForm = bodyParser.urlencoded({ extended: false })
 
 var limit = 3;
 
@@ -215,17 +220,17 @@ function compare_price_history_record(record1, record2) {
 
 
 /* GET home page. */
-router.get('/', async function (req, res, next) {
+router.get('/', csrfProtection, async function (req, res, next) {
     let most_expensive_limited = await get_top_memes();
     if (req.session.page_views) {
         req.session.page_views++;
     } else {
         req.session.page_views = 1;
     }
-    res.render('index', {title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited, views: req.session.page_views})
+    res.render('index', {csrfToken: req.csrfToken(), title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited, views: req.session.page_views})
 });
 
-router.get('/meme/:memeId', async function (req, res, next) {
+router.get('/meme/:memeId', csrfProtection, async function (req, res, next) {
     let memeId = req.params.memeId;
     let meme = await get_meme(memeId);
     if (meme === undefined) {
@@ -250,11 +255,11 @@ router.get('/meme/:memeId', async function (req, res, next) {
                 res.locals.loggedIn = false;
             }
         }
-        res.render('meme', {meme: meme, views: req.session.page_views});
+        res.render('meme', {csrfToken: req.csrfToken(), meme: meme, views: req.session.page_views});
     }
 });
 
-router.post('/', async function (req, res) {
+router.post('/', parseForm, csrfProtection, async function (req, res) {
     let most_expensive_limited = await get_top_memes();
     /*if (req.session.page_views) {
         req.session.page_views++;
@@ -285,10 +290,10 @@ router.post('/', async function (req, res) {
         res.clearCookie("ul");
         res.locals.loggedIn = false;
     }
-    res.render('index', {title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited, views: req.session.page_views})
+    res.render('index', {csrfToken: req.csrfToken(), title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited, views: req.session.page_views})
 });
 
-router.post('/meme/:memeId', async function (req, res, next) {
+router.post('/meme/:memeId', parseForm, csrfProtection, async function (req, res, next) {
     let memeId = req.params.memeId;
     let meme = await get_meme(memeId);
     let price = req.body.price;
@@ -318,7 +323,7 @@ router.post('/meme/:memeId', async function (req, res, next) {
         } else {
             req.session.page_views = 1;
         }*/
-        res.render('meme', {meme: meme1, views: req.session.page_views});
+        res.render('meme', {csrfToken: req.csrfToken(), meme: meme1, views: req.session.page_views});
     }
 });
 

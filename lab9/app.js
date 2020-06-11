@@ -6,12 +6,17 @@ var logger = require('morgan');
 var session = require('express-session');
 var sqlite3 = require('sqlite3');
 var SqLiteStore = require('connect-sqlite3')(session);
+var csrf = require('csurf');
+var bodyParser = require('body-parser');
 
 
 var indexRouter = require('./routes/index');
 //var usersRouter = require('./routes/users');
 
 var app = express();
+
+var csrfProtection = csrf({ cookie: true })
+var parseForm = bodyParser.urlencoded({ extended: false })
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
