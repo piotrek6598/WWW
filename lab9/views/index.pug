@@ -8,5 +8,5 @@ block content
             each meme in best_memes
                 li
                    a(href="meme/" + meme.id) #{meme.name}
-                   p(class='memPrice') Mem's price: #{meme.prices_history[0].price}
+                   p(class='memPrice') Mem's price: #{meme.price}
                    img(class='mem' src=meme.url)
