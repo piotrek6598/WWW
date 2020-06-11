@@ -2,6 +2,7 @@ var sqlite3 = require('sqlite3').verbose();
 var express = require('express');
 var createError = require('http-errors');
 var router = express.Router();
+var session = require('express-session');
 
 var limit = 3;
 
@@ -154,9 +155,14 @@ function compare_price_history_record(record1, record2) {
 /* GET home page. */
 router.get('/', async function (req, res, next) {
     let most_expensive_limited = await get_top_memes();
+    if (req.session.page_views) {
+        req.session.page_views++;
+    } else {
+        req.session.page_views = 1;
+    }
     //console.log(most_expensive_limited);
     //let most_expensive_limited = memes_list.sort((mem1, mem2) => mem2.prices_history[0].price - mem1.prices_history[0].price).slice(0, limit);
-    res.render('index', {title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited})
+    res.render('index', {title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited, views: req.session.page_views})
 });
 
 router.get('/meme/:memeId', async function (req, res, next) {
@@ -165,9 +171,14 @@ router.get('/meme/:memeId', async function (req, res, next) {
     if (meme === undefined) {
         next(createError(404, "Invalid meme id"));
     } else {
+        if (req.session.page_views) {
+            req.session.page_views++;
+        } else {
+            req.session.page_views = 1;
+        }
         meme.prices_history = await get_meme_price_history(memeId);
         meme.prices_history.sort(compare_price_history_record);
-        res.render('meme', {meme: meme});
+        res.render('meme', {meme: meme, views: req.session.page_views});
     }
 });
 
@@ -183,7 +194,12 @@ router.post('/meme/:memeId', async function (req, res, next) {
         meme1.prices_history = await get_meme_price_history(memeId);
         meme1.prices_history.sort(compare_price_history_record);
         meme1.price = req.body.price;
-        res.render('meme', {meme: meme1});
+        if (req.session.page_views) {
+            req.session.page_views++;
+        } else {
+            req.session.page_views = 1;
+        }
+        res.render('meme', {meme: meme1, views: req.session.page_views});
     }
 });
 

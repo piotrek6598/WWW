@@ -12,10 +12,13 @@
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
-    "pug": "^2.0.0-beta11",
-    "sqlite3": "^4.2.0"
+    "pug": "^2.0.0-beta11"
   },
   "devDependencies": {
-    "@types/sqlite3": "^3.1.6"
+    "@types/sqlite3": "^3.1.6",
+    "express-session": "^1.17.1",
+    "express-session-sqlite": "^2.0.5",
+    "memorystore": "^1.6.2",
+    "sqlite3": "^4.2.0"
   }
 }
