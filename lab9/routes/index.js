@@ -6,6 +6,7 @@ var router = express.Router();
 var session = require('express-session');
 var csrf = require('csurf');
 var bodyParser = require('body-parser');
+var sha256 = require('js-sha256').sha256;
 
 var csrfProtection = csrf({ cookie: true })
 var parseForm = bodyParser.urlencoded({ extended: false })
@@ -13,8 +14,9 @@ var parseForm = bodyParser.urlencoded({ extended: false })
 var limit = 3;
 
 function hashCode(str) {
-    return str.split('').reduce((prevHash, currVal) =>
-        (((prevHash << 5) - prevHash) + currVal.charCodeAt(0))|0, 0);
+    let hash = sha256.hmac.create(str);
+    //console.log(hash.hex());
+    return hash.hex();
 }
 
 function create_database() {
@@ -55,39 +57,6 @@ function create_database() {
 
 create_database();
 
-class Mem {
-    constructor(id, name, price, url) {
-        this.id = id;
-        this.name = name;
-        this.prices_history = [];
-        this.url = url;
-
-        this.change_price(price);
-    }
-
-    get price() {
-        return this.prices_history[0].price;
-    }
-
-    change_price(price) {
-        this.prices_history.reverse();
-        this.prices_history.push({price: price, time: new Date()});
-        this.prices_history.reverse();
-    }
-}
-
-let memes_list = [
-    new Mem(10, 'Gold', 1000, 'https://i.redd.it/h7rplf9jt8y21.png'),
-    new Mem(9, 'Platinum', 1100, 'http://www.quickmeme.com/img/90/90d3d6f6d527a64001b79f4e13bc61912842d4a5876d17c1f011ee519d69b469.jpg'),
-    new Mem(8, 'Elite', 1200, 'https://i.imgflip.com/30zz5g.jpg'),
-    new Mem(7, 'Taki sobie', 450, 'https://upload.wikimedia.org/wikipedia/commons/3/35/Obrazkowy_Mem_Internetowy.jpg'),
-    new Mem(6, 'Lepszy', 750, 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSllwCVRaqXkcjBrtdUt8V7hvCi3yhCzlQAqOwsycTLTg4FAZyd&usqp=CAU'),
-    new Mem(5, 'Jakiś mem', 643, 'https://cdn.medme.pl/zdjecie/9731,840,560,1/grumpy-cat.jpg'),
-    new Mem(4, 'Inny mem', 326, 'https://www.semtec.pl/wp-content/uploads/2016/09/kot.png'),
-    new Mem(3, 'Jeszcze inny mem', 452, 'https://filmdaily.co/wp-content/uploads/2020/05/cat-memes-lede.jpg'),
-    new Mem(2, 'Dobry mem', 839, 'https://images7.memedroid.com/images/UPLOADED712/5d8927a959a58.jpeg'),
-    new Mem(1, 'Słaby mem', 128, 'https://i.etsystatic.com/17214120/r/il/356dbf/1970150252/il_570xN.1970150252_h6s8.jpg')
-]
 
 function get_meme(memeId) {
     /*let result = await get_meme_with_promise(memeId).then(function (value) {
@@ -226,6 +195,18 @@ router.get('/', csrfProtection, async function (req, res, next) {
         req.session.page_views++;
     } else {
         req.session.page_views = 1;
+    }
+    let usr = req.cookies.usr;
+    let cookie = req.cookies.ul;
+    if (usr === undefined || cookie === undefined) {
+        res.locals.loggedIn = false;
+    } else {
+        let checked = await check_login_cookie(usr, cookie);
+        if (checked.find == 1) {
+            res.locals.loggedIn = true;
+        } else {
+            res.locals.loggedIn = false;
+        }
     }
     res.render('index', {csrfToken: req.csrfToken(), title: 'Meme market', message: 'Hello there!', best_memes: most_expensive_limited, views: req.session.page_views})
 });

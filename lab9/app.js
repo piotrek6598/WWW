@@ -8,6 +8,7 @@ var sqlite3 = require('sqlite3');
 var SqLiteStore = require('connect-sqlite3')(session);
 var csrf = require('csurf');
 var bodyParser = require('body-parser');
+var sha256 = require('js-sha256').sha256;
 
 
 var indexRouter = require('./routes/index');

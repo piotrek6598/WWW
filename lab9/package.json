@@ -20,6 +20,7 @@
     "@types/sqlite3": "^3.1.6",
     "express-session": "^1.17.1",
     "express-session-sqlite": "^2.0.5",
+    "js-sha256": "^0.9.0",
     "memorystore": "^1.6.2",
     "sqlite3": "^4.2.0"
   }
