@@ -1,5 +1,54 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    - function split_quiz_description(description) {return description.split('<br>');}
+    div(id="BodyMainPage")
+        header="Witaj w Quizach algebraicznych"
+
+        div(class="quizChoiceBox")
+            if (locals.loggedIn === true)
+                header="Wybierz jeden z poniżej dostępnych Quizów"
+            else
+                header="Zaloguj się aby rozwiązać jeden z poniższych Quizów"
+
+            each quiz in available_quizes
+                div(class="quiz")
+                    header=quiz.title
+                    div(class="quizDescription")
+                        each desc in split_quiz_description(quiz.description)
+                            =desc
+                            br
+                    div(class="quizScoring")
+                        header="Punktacja: łączny czas spędzony nad pytaniami oraz"
+                        ul(class="badAnswersPenaltyList")
+                            li(class="badAnswerPenaltyDescription")
+                                span(class="penaltyValue")  #{quiz.penalty}
+                                =" sekund kary za każdą błędną odpowiedź"
+                    if (locals.loggedIn == true)
+                        form(class="startQuizForm" action='/quiz/' + quiz.id method='POST')
+                            input(type='hidden' name='_csrf' value=csrfToken)
+                            input(type='submit' class='startButton' value='Zacznij')
+    if (locals.loggedIn === true)
+        div(class='loginBox')
+            form(action='/' method='POST')
+                input(type='hidden' name='_csrf' value=csrfToken)
+                input(type='hidden' name='login' value='logout')
+                input(type='submit' value='Sign out')
+            form(action='/' method='POST')
+                input(type='hidden' name='_csrf' value=csrfToken)
+                input(type='hidden' name='login' value='changepasswd')
+                input(type='submit' value='Change password')
+    else
+        div(class='loginBox')
+            form(action='/' method='POST')
+                input(type='hidden' name='_csrf' value=csrfToken)
+                input(type='text' placeholder='user' name='username' required)
+                br
+                input(type='password' placeholder='password' name='passwd' required)
+                br
+                input(type='hidden' name='login' value='login')
+                input(type='submit' value='Log in')
+            form(action='/' method='POST')
+                input(type='hidden' name='_csrf' value=csrfToken)
+                input(type='hidden' name='login' value='signup')
+                input(type='submit' value='Sign up')

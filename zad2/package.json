@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "build": "tsc --target es2015 *.ts",
+    "build": "tsc --target es2015 *.ts ./public/javascripts/*.ts",
     "createdb": "node db.js"
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
@@ -18,6 +19,7 @@
     "sqlite3": "^4.2.0"
   },
   "devDependencies": {
-    "@types/node": "^14.0.13"
+    "@types/node": "^14.0.13",
+    "csurf": "^1.11.0"
   }
 }

@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    header="Sign Up"
+    div(class='signupBox')
+        form(action='/signup' method='POST')
+            input(type='hidden' name='_csrf' value=csrfToken)
+            label User:
+            input(type='text' placeholder='user' name='username' required)
+            br
+            label Password:
+            input(type='password' placeholder='password' name='passwd' required)
+            br
+            label Repeat password:
+            input(type='password' placeholder='password' name='rpasswd' required)
+            br
+            input(type='submit' value='Sign Up')
+            a(href='/') Back to main page.

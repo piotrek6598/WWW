@@ -1,8 +1,384 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: sans-serif;
+  font-size: 12px;
+  background-color: lightblue;
+  text-align: center;
 }
 
-a {
-  color: #00B7FF;
+#BodyMainPage {
+  font-family: sans-serif;
+  font-size: 12px;
+  background-color: lightblue;
+  display: grid;
+  grid-template-columns: 1fr;
+  text-align: center;
+}
+
+header {
+  text-align: center;
+  font-weight: bold;
+  font-size: 70px;
+  margin-top: 5px;
+  margin-bottom: 30px;
+}
+
+footer {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  color: red;
+  font-size: 12px;
+  margin-top: 40px
+}
+
+footer hr {
+  text-align: center;
+  width: 75%;
+  border-style: dashed;
+  color: black;
+  margin: 10px auto;
+}
+
+.quizChoiceBox {
+  text-align: left;
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+.quizChoiceBox header {
+  font-size: 30px;
+}
+
+.quiz {
+  width: 500px;
+  margin: 30px auto;
+}
+
+.quiz header {
+  text-align: left;
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.quizScoring header {
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.badAnswersPenaltyList {
+  list-style: none;
+  padding-inline-start: 25px;
+}
+
+.badAnswerPenaltyDescription:before {
+  content: "+";
+}
+
+.penaltyValue {
+  font-weight: bold;
+  color: red;
+}
+
+#quizIntro {
+  text-align: center;
+}
+
+#BodyQuizPage {
+  font-family: sans-serif;
+  font-size: 15px;
+  background-color: lightblue;
+  display: none;
+  grid-template-columns: 600px auto;
+  max-width: 1000px;
+  text-align: center;
+}
+
+#quizTitle {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+#quizIntro {
+  font-size: 18px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  grid-row-start: 2;
+  grid-row-end: 3;
+}
+
+#quizQuestion {
+  font-size: 25px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+
+#questionForm {
+  display: grid;
+  position: relative;
+  grid-template-columns: 1fr 200px 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 10px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 4;
+  grid-row-end: 6;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+#questionAnswerField {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  width: 75%;
+  height: 25px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+#questionAnswerField input {
+  text-align: center;
+}
+
+#nextQuestionButton {
+  position: absolute;
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 2;
+  text-align: center;
+  height: 25px;
+}
+
+#prevQuestionButton {
+  position: absolute;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  height: 25px;
+  right: 0;
+  text-align: center;
+  float: left;
+}
+
+#quizSubmitButton {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  text-align: center;
+  width: 80%;
+  height: 25px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#questionCounter {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 4;
+}
+
+#questionCounterText {
+  font-size: 18px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+#questionNumber {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+#timerBox {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 5;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+#penaltyBox {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 4;
+  grid-row-end: 5;
+}
+
+#penaltyText {
+  font-size: 15px;
+}
+
+#penaltyValue {
+  font-weight: bold;
+  color: red;
+}
+
+#breakQuizBox {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 6;
+  grid-row-end: 7;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+#BodyQuizSummaryPage {
+  font-family: sans-serif;
+  font-size: 12px;
+  background-color: lightblue;
+  display: none;
+  grid-template-columns: 1fr;
+  text-align: center;
+}
+
+#quizSummary {
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.questionSummary {
+  text-align: left;
+  font-size: 18px;
+}
+
+.questionNumberSummary {
+  font-weight: bold;
+}
+
+#badAnswersBox {
+  text-align: left;
+  font-size: 10px;
+  width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.userAnswer {
+  font-weight: bold;
+  color: red;
+}
+
+.correctAnswer {
+  font-weight: bold;
+  color: green;
+}
+
+#quizSummary td, th, tr, table {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding-top: 5px;
+  padding-left: 3px;
+}
+
+#quizSummary th {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.answerOK {
+  background-color: chartreuse;
+}
+
+.answerBad {
+  background-color: red;
+}
+
+
+#saveResultForm {
+  margin-top: 15px;
+}
+
+#BodyQuizSummaryPage footer {
+  grid-column-start: 1;
+  grid-column-end: 2;
+}
+
+#scoreBox {
+  margin-top: 15px;
+  font-size: 18px;
+}
+
+.loginBox input {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  padding-left: 10px;
+}
+
+.msgBox {
+  color: red;
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.signupBox form {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  text-align: left;
+  position: relative;
+  left: 15%;
+  width: 85%;
+}
+
+.signupBox label {
+  display: grid;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  padding-right: 10px;
+  align-items: center;
+}
+
+.signupBox input {
+  display: grid;
+  grid-column: 2;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  padding-left: 10px;
+  width: 200px;
+}
+
+.signupBox a {
+  display: grid;
+  grid-column: 2;
+}
+
+.changepasswdBox form {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  text-align: left;
+  position: relative;
+  left: 15%;
+  width: 85%;
+}
+
+.changepasswdBox label {
+  display: grid;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  grid-column-start: 1;
+  grid-column-end: 2;
+  padding-right: 10px;
+  align-items: center;
+}
+
+.changepasswdBox input {
+  display: grid;
+  grid-column: 2;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  padding-left: 10px;
+  width: 200px;
+}
+
+.changepasswdBox a {
+  display: grid;
+  grid-column: 2;
 }

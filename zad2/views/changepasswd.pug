@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    header="Change password"
+    div(class='changepasswdBox')
+        form(action='/changepasswd' method='POST')
+            input(type='hidden' name='_csrf' value=csrfToken)
+            label Current password:
+            input(type='password' placeholder='current password' name='cpasswd' required)
+            br
+            label New password:
+            input(type='password' placeholder='password' name='passwd' required)
+            br
+            label Repeat password:
+            input(type='password' placeholder='password' name='rpasswd' required)
+            br
+            input(type='submit' value='Change password')
+            a(href='/') Back to main page.
