@@ -1,7 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var createError = require('http-errors');
-var {get_quiz_list, check_login, login, logout, check_login_cookie, cmp_passwd, add_user, find_user, change_passwd} = require('../db.js');
+var {
+    get_quiz_list, check_login, login, logout, check_login_cookie, cmp_passwd, add_user, find_user, change_passwd,
+    get_quiz
+} = require('../db.js');
 
 
 var csrf = require('csurf');
@@ -32,7 +35,8 @@ router.get('/', csrfProtection, async function (req, res, next) {
     get_quiz_list(quizes => {
         console.log(quizes);
         res.locals.message = false;
-        res.render('index', {csrfToken: req.csrfToken(), title: 'Quizy algebraiczne', available_quizes: quizes});
+        res.locals.available_quizes = quizes;
+        res.render('index', {csrfToken: req.csrfToken(), title: 'Quizy algebraiczne'});
     })
 });
 
@@ -104,7 +108,11 @@ router.post('/changepasswd', parseForm, csrfProtection, async function (req, res
     let new_cookie = create_login_cookie();
     if (cmp_passwd(cpasswd, passwd)) {
         res.locals.message = true;
-        res.render('changepasswd', {msg: "New password is the same password", csrfToken: req.csrfToken(), title: 'Password change'});
+        res.render('changepasswd', {
+            msg: "New password is the same password",
+            csrfToken: req.csrfToken(),
+            title: 'Password change'
+        });
     } else if (cmp_passwd(passwd, rpasswd)) {
         logout(usr);
         while (new_cookie == cookie)
@@ -118,7 +126,11 @@ router.post('/changepasswd', parseForm, csrfProtection, async function (req, res
         res.redirect('/');
     } else {
         res.locals.message = true;
-        res.render('changepasswd', {msg: "Passwords are different",csrfToken: req.csrfToken(), title: 'Password change'});
+        res.render('changepasswd', {
+            msg: "Passwords are different",
+            csrfToken: req.csrfToken(),
+            title: 'Password change'
+        });
     }
 });
 
@@ -151,7 +163,12 @@ router.post('/', parseForm, csrfProtection, async function (req, res, next) {
         }
         get_quiz_list(quizes => {
             console.log(quizes);
-            res.render('index', {msg: msg, csrfToken: req.csrfToken(), title: 'Quiz Algebraiczne', available_quizes: quizes});
+            res.render('index', {
+                msg: msg,
+                csrfToken: req.csrfToken(),
+                title: 'Quiz Algebraiczne',
+                available_quizes: quizes
+            });
         })
     } else if (req.body.login == "logout") {
         logout(req.cookies.usr);
@@ -165,6 +182,48 @@ router.post('/', parseForm, csrfProtection, async function (req, res, next) {
     } else {
         next(createError(400, "Bad login parameter"));
     }
+});
+
+router.get('/quiz/:quiz_id', csrfProtection, function (req, res, next) {
+    next(createError(403));
+});
+
+router.post('/quiz/:quiz_id', parseForm, csrfProtection, async function (req, res, next) {
+    let quiz_id = req.params.quiz_id;
+    let usr = req.cookies.usr;
+    let cookie = req.cookies.ul;
+    if (usr === undefined || cookie === undefined) {
+        res.locals.loggedIn = false;
+        next(createError(401, "Unauthorized user"));
+    } else {
+        let checked = await check_login_cookie(usr, cookie);
+        if (checked.find != 1) {
+            res.locals.loggedIn = false;
+            res.clearCookie("usr");
+            res.clearCookie("ul");
+            next(createError(401, "Unauthorized user"));
+        }
+    }
+    // todo check if not done previously
+    let quiz_desc = JSON.parse(req.body.quiz_desc);
+    let quiz_title = quiz_desc.title;
+    let answerPenalty = quiz_desc.penalty;
+    let quiz_intro = quiz_desc.introduction;
+    let quiz = await get_quiz(quiz_id, usr);
+    console.log(quiz_title);
+    console.log(answerPenalty);
+    console.log(quiz_intro)
+    console.log(quiz);
+    res.render('quiz', {csrfToken: req.csrfToken(), title: quiz_title, window: {quiz: quiz}, quiz: quiz, penalty: answerPenalty, intro: quiz_intro});
+});
+
+router.post('/quiz/:quiz_id/:solution_id', parseForm, csrfProtection, function (req, res, next) {
+    let quiz_id = req.params.quiz_id;
+    let solution_id = req.params.solution_id;
+    let answers = JSON.parse(req.body.answers);
+    console.log(quiz_id);
+    console.log(solution_id);
+    console.log(answers);
 });
 
 module.exports = router;

@@ -7,8 +7,11 @@ html
   body
     if (locals.message === true)
       div(class='msgBox')=msg
+    if window
+      each object, key in window
+        script.
+          window.!{key} = !{JSON.stringify(object)};
     block content
     footer
       hr
       content="Autor: Piotr Jasiński"
-    script(src='/javascripts/main.js')

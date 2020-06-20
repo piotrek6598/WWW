@@ -1,0 +1,38 @@
+extends layout
+
+block content
+    div(id="BodyQuizPage")
+        header(id="quizTitle")=title
+        div(id="quizIntro")=intro
+
+        div(id="questionCounter")
+            p(id="questionCounterText")="Pytanie"
+            span(id="questionNumber")="1"
+
+        div(id="penaltyBox")
+            span(id="penaltyText")
+                ="Możliwa kara: "
+                span(id="penaltyValue")=penalty
+                =" sekund"
+
+        div(id="quizQuestion")
+
+        form(action="/quiz/" + quiz.id + "/" + quiz.solution_id method='POST' id="questionForm")
+            input(type="hidden" name="_csrf" value=csrfToken)
+            label(for="questionAnswerField")
+            input(type="number" name="questionAnswer" id="questionAnswerField" placeholder="Twoja odpowiedź")
+            input(type="button" name="prevQuestion" id="prevQuestionButton" value="Poprzednie pytanie" onclick="setQuestionChange(-1)")
+            input(type="button" name="quizSubmit" id="quizSubmitButton" onclick="setQuestionChange(0)" value="Zakończ")
+            input(type="button" name="nextQuestion" id="nextQuestionButton" value="Następne pytanie" onclick="setQuestionChange(1)")
+            input(type="hidden" name="answers" id="answers")
+
+        div(id="timerBox")
+            p(id="timerText")
+                time="00:00"
+
+        form(id="breakQuizBox")
+            input(type="button" name="breakQuizButton" value="Przerwij Quiz" onclick="breakQuiz()")
+    script.
+        console.log("test")
+        console.log(window.quiz)
+    script(src='/javascripts/quiz.js')

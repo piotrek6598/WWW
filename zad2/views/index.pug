@@ -11,7 +11,7 @@ block content
             else
                 header="Zaloguj się aby rozwiązać jeden z poniższych Quizów"
 
-            each quiz in available_quizes
+            each quiz in locals.available_quizes
                 div(class="quiz")
                     header=quiz.title
                     div(class="quizDescription")
@@ -27,6 +27,7 @@ block content
                     if (locals.loggedIn == true)
                         form(class="startQuizForm" action='/quiz/' + quiz.id method='POST')
                             input(type='hidden' name='_csrf' value=csrfToken)
+                            input(type='hidden' name='quiz_desc' value=quiz)
                             input(type='submit' class='startButton' value='Zacznij')
     if (locals.loggedIn === true)
         div(class='loginBox')
@@ -52,3 +53,5 @@ block content
                 input(type='hidden' name='_csrf' value=csrfToken)
                 input(type='hidden' name='login' value='signup')
                 input(type='submit' value='Sign up')
+
+    script(src='/javascripts/mainPage.js')
