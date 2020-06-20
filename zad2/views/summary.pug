@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    div(id="BodyQuizSummaryPage")
+        header="Twoje wyniki:"
+        table(id="quizSummary")
+        div(id="badAnswersBox")
+        div(id="scoreBox")
+        div(id="rankingBox")
+            header="Najlepsze wyniki: "
+            table(id="rankingTable")
+        form(action='/summary' method='POST')
+            input(type="hidden" name="_csrf" value=csrfToken)
+            input(type="submit" value="Wróć")
+    script(src='/javascripts/summary.js')

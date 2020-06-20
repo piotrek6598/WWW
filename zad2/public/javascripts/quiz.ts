@@ -34,10 +34,6 @@ let prevQuestButton = document.getElementById("prevQuestionButton") as HTMLSelec
 let submitQuizButton = document.getElementById("quizSubmitButton") as HTMLSelectElement;
 let answer = document.getElementById("questionAnswerField") as HTMLInputElement;
 let timerText = document.getElementById("timerText") as HTMLElement;
-//let mainPageBody = document.getElementById("BodyMainPage") as HTMLDivElement;
-let quizSummaryPageBody = document.getElementById("BodyQuizSummaryPage") as HTMLDivElement;
-let tableSummary = document.getElementById("quizSummary") as HTMLTableElement;
-let badAnswer = document.getElementById("badAnswersBox") as HTMLDivElement;
 
 let quizPageBody = document.getElementById("BodyQuizPage") as HTMLDivElement;
 

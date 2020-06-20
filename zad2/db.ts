@@ -28,6 +28,7 @@ function create_database() {
         db.run('DROP TABLE IF EXISTS quiz_questions');
         db.run('DROP TABLE IF EXISTS quiz_scoring');
         db.run('DROP TABLE IF EXISTS users');
+        db.run('DROP TABLE IF EXISTS solutions');
     });
     db.serialize(function () {
         db.run('CREATE TABLE quiz(' +
@@ -47,8 +48,8 @@ function create_database() {
             'corrected_total_time INT)');
         db.run('CREATE TABLE quiz_scoring(' +
             'quiz_id INT,' +
-            'user_id INT,' +
-            'solution_id INT' +
+            'user_id VARCHAR(255),' +
+            'solution_id INT,' +
             'score INT,' +
             'start_time VARCHAR(255),' +
             'end_time VARCHAR(255))');
@@ -56,6 +57,10 @@ function create_database() {
             'username VARCHAR(255), ' +
             'passwd VARCHAR(255), ' +
             'loginCookie INT)');
+        db.run('CREATE TABLE solutions(' +
+            'solution_id INT,' +
+            'question_id INT,' +
+            'answer)');
     });
 
     db.serialize(function () {
@@ -133,6 +138,201 @@ function get_quiz_questions(quiz_id) {
     return result;
 }
 
+function get_quiz_answers(quiz_id) {
+    let db = get_db();
+    let result = new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.all('SELECT question_id, answer FROM quiz_questions WHERE quiz_id = ? ORDER BY question_id ASC',
+                [quiz_id], (err, rows) => {
+                    if (err) console.error(err.message);
+                    else resolve(rows);
+                });
+        });
+    });
+    db.close();
+    return result;
+}
+
+function get_quiz_start_time(solution_id) {
+    let db = get_db();
+    let result = new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.get('SELECT start_time FROM quiz_scoring WHERE solution_id = ?', [solution_id], (err, row) => {
+                if (err) console.error(err.message);
+                else resolve(row);
+            });
+        });
+    });
+    db.close();
+    return result;
+}
+
+function convert_string_to_seconds(hr) {
+    let tab = hr.split(':');
+    let minutes = parseInt(tab[0], 10) * 60 + parseInt(tab[1], 10);
+    return minutes * 60 + parseInt(tab[2], 10);
+}
+
+function get_time_difference(data_string1, data_string2) {
+    let date1 = data_string1.split("&&&time&&&=");
+    let date2 = data_string2.split("&&&time&&&=");
+    let diff = new Date(date2[0]).getSeconds() - new Date(date1[0]).getSeconds();
+    diff += convert_string_to_seconds(date2[1]);
+    diff -= convert_string_to_seconds(date1[1]);
+    return diff;
+}
+
+function get_quiz_penalty(quiz_id) {
+    let db = get_db();
+    let result = new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.get('SELECT penalty FROM quiz WHERE id = ?', [quiz_id], (err, row) => {
+                if (err) console.error(err.message);
+                else resolve(row);
+            });
+        });
+    });
+    db.close();
+    return result;
+}
+
+async function get_solution_summary(quiz_id, solution_id, penalty = -1, db = undefined) {
+    let str;
+    if (penalty == -1) {
+        penalty = (await get_quiz_penalty(quiz_id))['penalty'];
+    }
+    if (db == undefined) {
+        db = get_db();
+        str = true;
+    } else {
+        str = false;
+    }
+    let questions_with_answers = await new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.all('SELECT question, answer, corrected, attempts, corrected_total_time FROM quiz_questions WHERE quiz_id = ? ORDER BY question_id ASC',
+                [quiz_id], (err, rows) => {
+                    if (err) console.error(err.message);
+                    else resolve(rows);
+                });
+        });
+    }) as Array<any>;
+    let solution_answers = await new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.all('SELECT answer FROM solutions WHERE solution_id = ? ORDER BY question_id ASC', [solution_id], (err, rows) => {
+                if (err) console.error(err.message);
+                else resolve(rows);
+            });
+        });
+    }) as Array<any>;
+    let ranking = await new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.all('SELECT user_id as username, score FROM quiz_scoring WHERE quiz_id = ? AND score > -1 ORDER BY score ASC LIMIT 5', [quiz_id], (err, rows) => {
+                if (err) console.error(err.message);
+                else resolve(rows);
+            });
+        });
+    }) as Array<any>;
+    let solution_score = await new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.get('SELECT score FROM quiz_scoring WHERE solution_id = ?', [solution_id], (err, row) => {
+                if (err) console.error(err.message);
+                else resolve(row);
+            });
+        });
+    });
+    if (str) {
+        console.log("I'm closing");
+        db.close();
+    }
+    /*console.log("TEST");
+    console.log(questions_with_answers);
+    console.log(solution_answers);*/
+    let answers = [];
+    let totalPenalty = 0;
+    for (let i = 0; i < questions_with_answers.length; i++) {
+        let answerBox = {
+            question: questions_with_answers[i].question,
+            user_answer: solution_answers[i].answer,
+            correct_answer: questions_with_answers[i].answer,
+            correct: solution_answers[i].answer == questions_with_answers[i].answer,
+            avg_score: Math.floor(questions_with_answers[i].corrected * 100 / questions_with_answers[i].attempts),
+            avg_time: questions_with_answers[i].corrected == 0 ? NaN : Math.ceil(questions_with_answers[i].corrected_total_time / questions_with_answers[i].corrected)
+        }
+        if (questions_with_answers[i].answer != solution_answers[i].answer)
+            totalPenalty += penalty;
+        answers.push(answerBox);
+    }
+    let result = {
+        time: parseInt(solution_score['score'].toString(), 10) - totalPenalty,
+        totalPenalty: totalPenalty,
+        penalty: penalty,
+        answers: answers,
+        ranking: ranking
+    };
+    /*console.log(result);
+    console.log("Returning result");*/
+    return result;
+}
+
+async function save_result(quiz_id, solution_id, answers) {
+    let answers_list = JSON.parse(answers);
+    let date = new Date();
+    let date_string = date.toDateString() + "&&&time&&&=" + date.toLocaleTimeString();
+    let start_time = await get_quiz_start_time(solution_id);
+    start_time = start_time['start_time'];
+    console.log(answers_list);
+    let solution_time = get_time_difference(start_time, date_string);
+    console.log(solution_time);
+    let correctAnswers = await get_quiz_answers(quiz_id);
+    console.log(correctAnswers);
+    let penalty = await get_quiz_penalty(quiz_id);
+    penalty = penalty['penalty'];
+    console.log(penalty);
+    let totalPenalty = 0;
+    let db = get_db();
+    let result;
+    await new Promise((resolve, reject) => {
+        db.serialize(async function () {
+            for (let i = 1; i <= answers_list.length; i++) {
+                let answer = answers_list[i - 1];
+                let correct_answer = correctAnswers[i - 1];
+                let qtime = Math.ceil(solution_time * parseInt(answer.time, 10) / 100);
+                let correct = correct_answer.answer == answer.answer;
+                console.log("Answer: " + answer.answer + ", correct answer: " + correct_answer.answer + ", " + correct);
+                if (correct) {
+                    db.run('UPDATE quiz_questions SET corrected = corrected + 1, attempts = attempts + 1, corrected_total_time = corrected_total_time + ? ' +
+                        'WHERE quiz_id = ? AND question_id = ?', [qtime, quiz_id, i]);
+                } else {
+                    db.run('UPDATE quiz_questions SET attempts = attempts + 1 WHERE quiz_id = ? AND question_id = ?', [quiz_id, i]);
+                    totalPenalty += parseInt(penalty.toString(), 10);
+                }
+                db.run('INSERT INTO solutions(solution_id, question_id, answer) VALUES (?, ?, ?)', [solution_id, i, answer.answer]);
+            }
+            db.run('UPDATE quiz_scoring SET score = ?, end_time = ? WHERE solution_id = ?', [solution_time + totalPenalty, date_string, solution_id]);
+            result = await get_solution_summary(quiz_id, solution_id, parseInt(penalty.toString(), 10), db);
+            resolve();
+        });
+    });
+    //db.close();
+    console.log("Finish");
+    return result;
+}
+
+function check_quiz_solved(quiz_id, user_id) {
+    let db = get_db();
+    let result = new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.get('SELECT solution_id, score FROM quiz_scoring WHERE quiz_id = ? AND user_id = ?',
+                [quiz_id, user_id], (err, row) => {
+                    if (err) console.error(err.message);
+                    else resolve(row);
+                });
+        });
+    });
+    db.close();
+    return result;
+}
+
 async function get_quiz(quiz_id, user_id) {
     let quiz_questions = await get_quiz_questions(quiz_id);
     let result = {
@@ -140,13 +340,12 @@ async function get_quiz(quiz_id, user_id) {
         solution_id: quiz_solution_next_id,
         questions: quiz_questions
     }
-    // todo save timestamp
     let date = new Date();
     let date_string = date.toDateString() + "&&&time&&&=" + date.toLocaleTimeString();
     let db = get_db();
     db.serialize(function () {
-        db.run('INSERT INTO quiz_scoring (quiz_id, user_id, solution_id, start_time) VALUES ' +
-            '(?, ?, ?, ?)', [quiz_id, user_id, quiz_solution_next_id, date_string]);
+        db.run('INSERT INTO quiz_scoring (quiz_id, user_id, solution_id, start_time, score) VALUES ' +
+            '(?, ?, ?, ?, -1)', [quiz_id, user_id, quiz_solution_next_id, date_string]);
     })
     db.close();
     quiz_solution_next_id++;
@@ -246,4 +445,7 @@ module.exports = {
     find_user: find_user,
     change_passwd: change_passwd,
     get_quiz: get_quiz,
+    save_result: save_result,
+    get_solution_summary: get_solution_summary,
+    check_quiz_resolved: check_quiz_solved,
 };

@@ -19,7 +19,16 @@
     "sqlite3": "^4.2.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/mocha": "^7.0.2",
     "@types/node": "^14.0.13",
-    "csurf": "^1.11.0"
+    "@types/selenium-webdriver": "^4.0.9",
+    "chai": "^4.2.0",
+    "csurf": "^1.11.0",
+    "mocha": "^8.0.1",
+    "mocha-webdriver": "^0.2.8",
+    "selenium-webdriver": "^4.0.0-alpha.7",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
   }
 }
