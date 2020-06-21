@@ -11,8 +11,6 @@ function setMobileMainViewport() {
         // Global changes
         document.body.style.fontSize = "10px";
         document.querySelector("header").style.fontSize = "40px";
-        //document.querySelector("footer").style.fontSize = "10px";
-        //document.querySelector("footer").style.marginTop = "15px";
 
         // Changes in main section
         mainPageBody.style.fontSize = "10px";
@@ -31,8 +29,6 @@ function setMobileMainViewport() {
         // Restoring global changes
         document.body.style.fontSize = "12px";
         document.querySelector("header").style.fontSize = "70px";
-        //document.querySelector("footer").style.fontSize = "12px";
-        //document.querySelector("footer").style.marginTop = "40px";
 
         // Restoring changes in main section
         mainPageBody.style.fontSize = "10px";

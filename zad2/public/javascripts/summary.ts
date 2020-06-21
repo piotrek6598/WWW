@@ -81,7 +81,6 @@ function quizSummary() {
     for (let i = 0; i < summary.answers.length; i++) {
         let answerRow = tableSummary.insertRow();
         let cell = answerRow.insertCell();
-        let question = summary.answers[i].question;
         let correctAnswer = summary.answers[i].correct;
 
         cell.innerHTML = "<span class='questionNumberSummary'>" + (i + 1).toString() + "</span>";

@@ -42,7 +42,6 @@ let mobileQuizViewport = window.matchMedia("(max-width: 600px)");
 
 function setTabletQuizViewport() {
     let qTexts = document.getElementsByClassName("questionText") as HTMLCollectionOf<HTMLElement>;
-    //let qSummaries = document.getElementsByClassName("questionSummary") as HTMLCollectionOf<HTMLElement>;
     let questionCounter = document.getElementById("questionCounter") as HTMLDivElement;
     let penaltyBox = document.getElementById("penaltyBox") as HTMLDivElement;
     let timerBox = document.getElementById("timerBox") as HTMLDivElement;
@@ -58,7 +57,6 @@ function setTabletQuizViewport() {
         // Changes in summary section
         for (let i = 0; i < qTexts.length; i++) {
             qTexts[i].style.display = "none";
-            //qSummaries[i].style.textAlign = "center";
         }
     } else {
         // Restoring changes in quiz section
@@ -71,37 +69,17 @@ function setTabletQuizViewport() {
         // Restoring changes in summary section
         for (let i = 0; i < qTexts.length; i++) {
             qTexts[i].style.display = "initial";
-            //qSummaries[i].style.textAlign = "left";
         }
     }
 }
 
 function setMobileQuizViewport() {
-    let quizChoiceHeaders = document.getElementsByClassName("quizChoiceBox") as HTMLCollectionOf<HTMLElement>;
-    let quizes = document.getElementsByClassName("quiz") as HTMLCollectionOf<HTMLElement>;
-    let quizScorings = document.getElementsByClassName("quizScoring") as HTMLCollectionOf<HTMLElement>;
-    let penaltyLists = document.getElementsByClassName("badAnswersPenaltyList") as HTMLCollectionOf<HTMLElement>;
     let questionForm = document.getElementById("questionForm") as HTMLDivElement;
 
     if (mobileQuizViewport.matches) {
         // Global changes
         document.body.style.fontSize = "10px";
         document.querySelector("header").style.fontSize = "40px";
-        //document.querySelector("footer").style.fontSize = "10px";
-        //document.querySelector("footer").style.marginTop = "15px";
-
-        // Changes in main section
-        for (let i = 0; i < quizChoiceHeaders.length; i++)
-            quizChoiceHeaders[i].querySelector("header").style.fontSize = "25px";
-        for (let i = 0; i < quizes.length; i++) {
-            quizes[i].querySelector("header").style.fontSize = "15px";
-            quizes[i].style.margin = "30px 20px";
-            quizes[i].style.width = "90%";
-        }
-        for (let i = 0; i < quizScorings.length; i++)
-            quizScorings[i].querySelector("header").style.fontSize = "12px";
-        for (let i = 0; i < penaltyLists.length; i++)
-            penaltyLists[i].style.paddingInlineStart = "20px";
 
         // Changes in quiz section
         quizPageBody.style.fontSize = "12px";
@@ -116,21 +94,6 @@ function setMobileQuizViewport() {
         // Restoring global changes
         document.body.style.fontSize = "12px";
         document.querySelector("header").style.fontSize = "70px";
-        //document.querySelector("footer").style.fontSize = "12px";
-        //document.querySelector("footer").style.marginTop = "40px";
-
-        // Restoring changes in main section
-        for (let i = 0; i < quizChoiceHeaders.length; i++)
-            quizChoiceHeaders[i].querySelector("header").style.fontSize = "25px";
-        for (let i = 0; i < quizes.length; i++) {
-            quizes[i].querySelector("header").style.fontSize = "18px";
-            quizes[i].style.margin = "30px auto";
-            quizes[i].style.width = "500px";
-        }
-        for (let i = 0; i < quizScorings.length; i++)
-            quizScorings[i].querySelector("header").style.fontSize = "12px";
-        for (let i = 0; i < penaltyLists.length; i++)
-            penaltyLists[i].style.paddingInlineStart = "25px";
 
         // Restoring changes in quiz section
         quizPageBody.style.fontSize = "15px";
@@ -167,7 +130,6 @@ function loadQuestion(questionNum: number) {
     answer.value = isNaN(answers[questionNum].answer) ?
         "" : answers[questionNum].answer.toString();
     quizQuestion.innerText = selectedQuiz.questions[questionNum].questionText;
-    //penaltyValue.innerText = selectedQuiz.questions[questionNum].penalty.toString();
     currQuestionAnswered = answer.value != "";
     printQuestionNumber();
     saveTimeStamp(stopwatch);
@@ -206,7 +168,6 @@ function printQuestionNumber() {
 }
 
 function checkIfAnswerInserted() {
-    console.log("Checking");
     if (answer.value != "" && !currQuestionAnswered) {
         currQuestionAnswered = true;
         answeredQuestions++;
@@ -247,28 +208,12 @@ function changeQuestion(change : number) {
     loadQuestion(currQuestion);
 }
 
-/*function submitQuestion() {
-    saveAnswer(currQuestion);
-    if (state == 0)
-        quizSummary();
-    else
-        changeQuestion(state);
-}*/
-
-/*function breakQuiz() {
-    resetQuiz();
-    quizPageBody.style.display = "none";
-    mainPageBody.style.display = "grid";
-}*/
-
 function loadQuiz() {
     selectedQuiz = window['quiz'];
     quizPageBody.style.display = "grid";
     nextQuestButton.style.display = "initial";
     prevQuestButton.style.display = "none";
     submitQuizButton.disabled = true;
-    //quizTitle.innerText = selectedQuiz.title;
-    //quizIntro.innerText = selectedQuiz.introduction;
     totalQuestions = selectedQuiz.questions.length;
     for (let i = 0; i < totalQuestions; i++) {
         let answer : questionAnswer = {

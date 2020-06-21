@@ -241,12 +241,8 @@ async function get_solution_summary(quiz_id, solution_id, penalty = -1, db = und
         });
     });
     if (str) {
-        console.log("I'm closing");
         db.close();
     }
-    /*console.log("TEST");
-    console.log(questions_with_answers);
-    console.log(solution_answers);*/
     let answers = [];
     let totalPenalty = 0;
     for (let i = 0; i < questions_with_answers.length; i++) {
@@ -269,8 +265,6 @@ async function get_solution_summary(quiz_id, solution_id, penalty = -1, db = und
         answers: answers,
         ranking: ranking
     };
-    /*console.log(result);
-    console.log("Returning result");*/
     return result;
 }
 
@@ -280,14 +274,10 @@ async function save_result(quiz_id, solution_id, answers) {
     let date_string = date.toDateString() + "&&&time&&&=" + date.toLocaleTimeString();
     let start_time = await get_quiz_start_time(solution_id);
     start_time = start_time['start_time'];
-    console.log(answers_list);
     let solution_time = get_time_difference(start_time, date_string);
-    console.log(solution_time);
     let correctAnswers = await get_quiz_answers(quiz_id);
-    console.log(correctAnswers);
     let penalty = await get_quiz_penalty(quiz_id);
     penalty = penalty['penalty'];
-    console.log(penalty);
     let totalPenalty = 0;
     let db = get_db();
     let result;
@@ -298,7 +288,6 @@ async function save_result(quiz_id, solution_id, answers) {
                 let correct_answer = correctAnswers[i - 1];
                 let qtime = Math.ceil(solution_time * parseInt(answer.time, 10) / 100);
                 let correct = correct_answer.answer == answer.answer;
-                console.log("Answer: " + answer.answer + ", correct answer: " + correct_answer.answer + ", " + correct);
                 if (correct) {
                     db.run('UPDATE quiz_questions SET corrected = corrected + 1, attempts = attempts + 1, corrected_total_time = corrected_total_time + ? ' +
                         'WHERE quiz_id = ? AND question_id = ?', [qtime, quiz_id, i]);
@@ -314,7 +303,6 @@ async function save_result(quiz_id, solution_id, answers) {
         });
     });
     //db.close();
-    console.log("Finish");
     return result;
 }
 
