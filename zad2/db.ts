@@ -399,10 +399,14 @@ function find_user(user) {
 
 function logout(user) {
     let db = get_db();
-    db.serialize(function () {
-        db.run('UPDATE users SET loginCookie = -1 WHERE username = ?', [user]);
+    let result = new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.run('UPDATE users SET loginCookie = -1 WHERE username = ?', [user]);
+            resolve();
+        });
     });
     db.close();
+    return result;
 }
 
 function check_login_cookie(user, cookie) {
@@ -426,10 +430,14 @@ function cmp_passwd(passwd1, passwd2) {
 function change_passwd(user, passwd) {
     passwd = hashCode(passwd);
     let db = get_db();
-    db.serialize(function () {
-        db.run('UPDATE users SET passwd = ? WHERE username = ?', [passwd, user]);
+    let result = new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.run('UPDATE users SET passwd = ?, loginCookie = -1 WHERE username = ?', [passwd, user]);
+            resolve();
+        });
     });
     db.close();
+    return result;
 }
 
 create_database();

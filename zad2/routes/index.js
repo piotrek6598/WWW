@@ -114,15 +114,18 @@ router.post('/changepasswd', parseForm, csrfProtection, async function (req, res
             title: 'Password change'
         });
     } else if (cmp_passwd(passwd, rpasswd)) {
-        logout(usr);
+        await logout(usr);
         while (new_cookie == cookie)
             new_cookie = create_login_cookie();
-        change_passwd(usr, passwd);
+        await change_passwd(usr, passwd);
         let set_cookie = await login(usr, passwd, new_cookie);
-        res.cookie('usr', req.body.username);
+        while (set_cookie == undefined)
+            set_cookie = await login(usr, passwd, new_cookie);
+        res.cookie('usr', usr);
         res.cookie('ul', set_cookie.cookie);
         res.locals.loggedIn = true;
         res.locals.message = false;
+        console.log("Redirecting to main");
         res.redirect('/');
     } else {
         res.locals.message = true;
