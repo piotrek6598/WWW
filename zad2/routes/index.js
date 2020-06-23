@@ -16,6 +16,26 @@ function create_login_cookie() {
     return Math.floor(Math.random() * 1000000) + 246738;
 }
 
+async function isLoggedIn(req, res, next) {
+    let usr = req.cookies.usr;
+    let cookie = req.cookies.ul;
+    if (usr === undefined || cookie === undefined) {
+        res.locals.loggedIn = false;
+        next(createError(401, "Unauthorized user"));
+        return;
+    } else {
+        let checked = await check_login_cookie(usr, cookie);
+        if (checked.find != 1) {
+            res.locals.loggedIn = false;
+            res.clearCookie("usr");
+            res.clearCookie("ul");
+            next(createError(401, "Unauthorized user"));
+            return;
+        }
+    }
+    next();
+}
+
 /* GET home page. */
 router.get('/', csrfProtection, async function (req, res, next) {
     let usr = req.cookies.usr;
@@ -194,24 +214,10 @@ router.get('/summary', csrfProtection, function (req, res, next) {
     next(createError(403));
 });
 
-router.post('/quiz/:quiz_id', parseForm, csrfProtection, async function (req, res, next) {
+router.post('/quiz/:quiz_id', parseForm, csrfProtection, isLoggedIn, async function (req, res, next) {
+    console.log("OK");
     let quiz_id = req.params.quiz_id;
     let usr = req.cookies.usr;
-    let cookie = req.cookies.ul;
-    if (usr === undefined || cookie === undefined) {
-        res.locals.loggedIn = false;
-        next(createError(401, "Unauthorized user"));
-        return;
-    } else {
-        let checked = await check_login_cookie(usr, cookie);
-        if (checked.find != 1) {
-            res.locals.loggedIn = false;
-            res.clearCookie("usr");
-            res.clearCookie("ul");
-            next(createError(401, "Unauthorized user"));
-            return;
-        }
-    }
     let solution_id = await check_quiz_resolved(quiz_id, usr);
     if (solution_id != undefined) {
         if (solution_id.score == -1) {
@@ -253,22 +259,8 @@ router.post('/quiz/:quiz_id', parseForm, csrfProtection, async function (req, re
     });
 });
 
-router.post('/quiz/:quiz_id/:solution_id', parseForm, csrfProtection, async function (req, res, next) {
+router.post('/quiz/:quiz_id/:solution_id', parseForm, csrfProtection, isLoggedIn, async function (req, res, next) {
     let quiz_id = req.params.quiz_id;
-    let usr = req.cookies.usr;
-    let cookie = req.cookies.ul;
-    if (usr === undefined || cookie === undefined) {
-        res.locals.loggedIn = false;
-        next(createError(401, "Unauthorized user"));
-    } else {
-        let checked = await check_login_cookie(usr, cookie);
-        if (checked.find != 1) {
-            res.locals.loggedIn = false;
-            res.clearCookie("usr");
-            res.clearCookie("ul");
-            next(createError(401, "Unauthorized user"));
-        }
-    }
     let solution_id = req.params.solution_id;
     let summary = await save_result(quiz_id, solution_id, req.body.answers);
     res.render('summary', {csrfToken: req.csrfToken(), title: 'Quiz summary', window: {summary: summary}});

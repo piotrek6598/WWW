@@ -1,11 +1,15 @@
 let sqlite3 = require('sqlite3').verbose();
-let sha256 = require('js-sha256').sha256
+let sha256 = require('js-sha256').sha256;
 
 let quiz_solution_next_id = 1;
 
-function hashCode(str: String) {
-    let hash = sha256.hmac.create(str + "5hyz3");
+function hashCode(str: String, salt: String) {
+    let hash = sha256.hmac.create(str.concat(salt.toString()));
     return hash.hex();
+}
+
+function create_random_salt() {
+    return Math.random().toString(36).slice(-5);
 }
 
 function get_db() {
@@ -14,9 +18,11 @@ function get_db() {
 
 function add_user(user: String, passwd: String, cookieval: Number) {
     let db = get_db();
-    passwd = hashCode(passwd);
+    let salt = create_random_salt();
+    console.log(salt);
+    passwd = hashCode(passwd, salt);
     db.serialize(function () {
-        db.run('INSERT INTO users(username, passwd, loginCookie) VALUES (?, ? ,?)', [user, passwd, cookieval]);
+        db.run('INSERT INTO users(username, passwd, loginCookie, salt) VALUES (?, ?, ?, ?)', [user, passwd, cookieval, salt]);
     });
     db.close();
 }
@@ -56,7 +62,8 @@ function create_database() {
         db.run('CREATE TABLE users(' +
             'username VARCHAR(255), ' +
             'passwd VARCHAR(255), ' +
-            'loginCookie INT)');
+            'loginCookie INT,' +
+            'salt VARCHAR(255))');
         db.run('CREATE TABLE solutions(' +
             'solution_id INT,' +
             'question_id INT,' +
@@ -104,9 +111,10 @@ function create_database() {
             '(3, 6, "1777620 / 2756 + 24 = ?", 669, 0, 0, 0),' +
             '(3, 7, "275 / 16 * 123 * 368 = ?", 777975, 0, 0, 0),' +
             '(3, 8, "65810128 / 42568 + 2789 * 681 = ?", 1900855, 0, 0, 0)');
-        db.run('INSERT INTO users(username, passwd, loginCookie) VALUES' +
-            '("user1", ?, -1),' +
-            '("user2", ?, -1)', [hashCode("user1"), hashCode("user2")]);
+        let salt1 = create_random_salt(), salt2 = create_random_salt();
+        db.run('INSERT INTO users(username, passwd, loginCookie, salt) VALUES' +
+            '("user1", ?, -1, ?),' +
+            '("user2", ?, -1, ?)', [hashCode("user1", salt1), salt1, hashCode("user2", salt2), salt2]);
     });
 
     db.close();
@@ -196,6 +204,51 @@ function get_quiz_penalty(quiz_id) {
     return result;
 }
 
+function get_question_with_answers(quiz_id, db) {
+    return new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.all('SELECT question, answer, corrected, attempts, corrected_total_time FROM quiz_questions WHERE quiz_id = ? ORDER BY question_id ASC',
+                [quiz_id], (err, rows) => {
+                    if (err) console.error(err.message);
+                    else resolve(rows);
+                });
+        });
+    });
+}
+
+function get_solution_answers(solution_id, db) {
+    return new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.all('SELECT answer FROM solutions WHERE solution_id = ? ORDER BY question_id ASC', [solution_id], (err, rows) => {
+                if (err) console.error(err.message);
+                else resolve(rows);
+            });
+        });
+    });
+}
+
+function get_quiz_ranking(quiz_id, db) {
+    return new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.all('SELECT user_id as username, score FROM quiz_scoring WHERE quiz_id = ? AND score > -1 ORDER BY score ASC LIMIT 5', [quiz_id], (err, rows) => {
+                if (err) console.error(err.message);
+                else resolve(rows);
+            });
+        });
+    });
+}
+
+function get_solution_score(solution_id, db) {
+    return new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.get('SELECT score FROM quiz_scoring WHERE solution_id = ?', [solution_id], (err, row) => {
+                if (err) console.error(err.message);
+                else resolve(row);
+            });
+        });
+    });
+}
+
 async function get_solution_summary(quiz_id, solution_id, penalty = -1, db = undefined) {
     let str;
     if (penalty == -1) {
@@ -207,42 +260,16 @@ async function get_solution_summary(quiz_id, solution_id, penalty = -1, db = und
     } else {
         str = false;
     }
-    let questions_with_answers = await new Promise((resolve, reject) => {
-        db.serialize(function () {
-            db.all('SELECT question, answer, corrected, attempts, corrected_total_time FROM quiz_questions WHERE quiz_id = ? ORDER BY question_id ASC',
-                [quiz_id], (err, rows) => {
-                    if (err) console.error(err.message);
-                    else resolve(rows);
-                });
-        });
-    }) as Array<any>;
-    let solution_answers = await new Promise((resolve, reject) => {
-        db.serialize(function () {
-            db.all('SELECT answer FROM solutions WHERE solution_id = ? ORDER BY question_id ASC', [solution_id], (err, rows) => {
-                if (err) console.error(err.message);
-                else resolve(rows);
-            });
-        });
-    }) as Array<any>;
-    let ranking = await new Promise((resolve, reject) => {
-        db.serialize(function () {
-            db.all('SELECT user_id as username, score FROM quiz_scoring WHERE quiz_id = ? AND score > -1 ORDER BY score ASC LIMIT 5', [quiz_id], (err, rows) => {
-                if (err) console.error(err.message);
-                else resolve(rows);
-            });
-        });
-    }) as Array<any>;
-    let solution_score = await new Promise((resolve, reject) => {
-        db.serialize(function () {
-            db.get('SELECT score FROM quiz_scoring WHERE solution_id = ?', [solution_id], (err, row) => {
-                if (err) console.error(err.message);
-                else resolve(row);
-            });
-        });
-    });
+
+    let questions_with_answers = await get_question_with_answers(quiz_id, db) as Array<any>;
+    let solution_answers = await get_solution_answers(solution_id, db) as Array<any>;
+    let ranking = await get_quiz_ranking(quiz_id, db) as Array<any>;
+    let solution_score = await get_solution_score(solution_id, db);
+
     if (str) {
         db.close();
     }
+
     let answers = [];
     let totalPenalty = 0;
     for (let i = 0; i < questions_with_answers.length; i++) {
@@ -268,6 +295,25 @@ async function get_solution_summary(quiz_id, solution_id, penalty = -1, db = und
     return result;
 }
 
+function update_question_stats_and_totalpenalty(correct, qtime, quiz_id, question_id, totalPenalty, penalty, db) {
+    if (correct) {
+        db.run('UPDATE quiz_questions SET corrected = corrected + 1, attempts = attempts + 1, corrected_total_time = corrected_total_time + ? ' +
+            'WHERE quiz_id = ? AND question_id = ?', [qtime, quiz_id, question_id]);
+    } else {
+        db.run('UPDATE quiz_questions SET attempts = attempts + 1 WHERE quiz_id = ? AND question_id = ?', [quiz_id, question_id]);
+        totalPenalty += parseInt(penalty.toString(), 10);
+    }
+    return totalPenalty;
+}
+
+function update_solution_details(solution_id, question_id, answer, db) {
+    db.run('INSERT INTO solutions(solution_id, question_id, answer) VALUES (?, ?, ?)', [solution_id, question_id, answer]);
+}
+
+function update_quiz_score(solution_id, score, end_time, db) {
+    db.run('UPDATE quiz_scoring SET score = ?, end_time = ? WHERE solution_id = ?', [score, end_time, solution_id]);
+}
+
 async function save_result(quiz_id, solution_id, answers) {
     let answers_list = JSON.parse(answers);
     let date = new Date();
@@ -288,21 +334,14 @@ async function save_result(quiz_id, solution_id, answers) {
                 let correct_answer = correctAnswers[i - 1];
                 let qtime = Math.ceil(solution_time * parseInt(answer.time, 10) / 100);
                 let correct = correct_answer.answer == answer.answer;
-                if (correct) {
-                    db.run('UPDATE quiz_questions SET corrected = corrected + 1, attempts = attempts + 1, corrected_total_time = corrected_total_time + ? ' +
-                        'WHERE quiz_id = ? AND question_id = ?', [qtime, quiz_id, i]);
-                } else {
-                    db.run('UPDATE quiz_questions SET attempts = attempts + 1 WHERE quiz_id = ? AND question_id = ?', [quiz_id, i]);
-                    totalPenalty += parseInt(penalty.toString(), 10);
-                }
-                db.run('INSERT INTO solutions(solution_id, question_id, answer) VALUES (?, ?, ?)', [solution_id, i, answer.answer]);
+                totalPenalty = update_question_stats_and_totalpenalty(correct, qtime, quiz_id, i, totalPenalty, penalty, db);
+                update_solution_details(solution_id, i, answer.answer, db);
             }
-            db.run('UPDATE quiz_scoring SET score = ?, end_time = ? WHERE solution_id = ?', [solution_time + totalPenalty, date_string, solution_id]);
+            update_quiz_score(solution_id, solution_time + totalPenalty, date_string, db);
             result = await get_solution_summary(quiz_id, solution_id, parseInt(penalty.toString(), 10), db);
             resolve();
         });
     });
-    //db.close();
     return result;
 }
 
@@ -340,12 +379,44 @@ async function get_quiz(quiz_id, user_id) {
     return result;
 }
 
-function check_login(user, passwd) {
-    passwd = hashCode(passwd);
+function check_if_user_exists(user, db) {
+    return new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.get('SELECT count(*) as find FROM users WHERE username = ?', [user], (err, row) => {
+                if (err) console.error(err.message);
+                else resolve(row);
+            });
+        });
+    });
+}
+
+function get_user_salt(user, db) {
+    return new Promise((resolve, reject) => {
+        db.serialize(function () {
+            db.get('SELECT salt FROM users WHERE username = ?', [user], (err, row) => {
+                if (err) console.error(err.message);
+                else resolve(row);
+            });
+        });
+    });
+};
+
+async function check_login(user, passwd) {
     let db = get_db();
+    let user_exists = await check_if_user_exists(user, db);
+
+    if (user_exists['find'] == 0) {
+        return new Promise((resolve, reject) => {
+            resolve({find: 0});
+        });
+    }
+    let salt = await get_user_salt(user, db);
+    salt = salt['salt'];
+
+    passwd = hashCode(passwd, salt.toString());
     let result = new Promise((resolve, reject) => {
         db.serialize(function () {
-            db.get('SELECT count(*) as find FROM users WHERE username = ? AND passwd = ?', [user, passwd], (err, row) => {
+            db.get('SELECT count(*) as find FROM users WHERE username = ? AND passwd = ? AND salt = ?', [user, passwd, salt.toString()], (err, row) => {
                 if (err) reject(err);
                 else resolve(row);
             });
@@ -355,14 +426,16 @@ function check_login(user, passwd) {
     return result;
 }
 
-function login(user, passwd, cookieVal) {
-    passwd = hashCode(passwd);
+async function login(user, passwd, cookieVal) {
     let db = get_db();
+    let salt = await get_user_salt(user, db);
+    salt = salt['salt'];
+    passwd = hashCode(passwd, salt.toString());
     db.serialize(function () {
-        db.run('UPDATE users SET loginCookie = ? WHERE username = ? AND passwd = ? AND loginCookie = -1', [cookieVal, user, passwd]);
+        db.run('UPDATE users SET loginCookie = ? WHERE username = ? AND passwd = ? AND loginCookie = -1 AND salt = ?', [cookieVal, user, passwd, salt.toString()]);
     });
     let result = new Promise((resolve, reject) => {
-        db.get('SELECT loginCookie as cookie FROM users WHERE username = ? AND passwd = ?', [user, passwd], (err, row) => {
+        db.get('SELECT loginCookie as cookie FROM users WHERE username = ? AND passwd = ? AND salt = ?', [user, passwd, salt.toString()], (err, row) => {
             if (err) resolve({cookie: -1});
             else resolve(row);
         });
@@ -410,17 +483,18 @@ function check_login_cookie(user, cookie) {
 }
 
 function cmp_passwd(passwd1, passwd2) {
-    passwd1 = hashCode(passwd1);
-    passwd2 = hashCode(passwd2);
+    passwd1 = hashCode(passwd1, "");
+    passwd2 = hashCode(passwd2, "");
     return passwd1 == passwd2;
 }
 
 function change_passwd(user, passwd) {
-    passwd = hashCode(passwd);
+    let salt = create_random_salt();
+    passwd = hashCode(passwd, salt);
     let db = get_db();
     let result = new Promise((resolve, reject) => {
         db.serialize(function () {
-            db.run('UPDATE users SET passwd = ?, loginCookie = -1 WHERE username = ?', [passwd, user]);
+            db.run('UPDATE users SET passwd = ?, loginCookie = -1, salt = ? WHERE username = ?', [passwd, salt, user]);
             resolve();
         });
     });
